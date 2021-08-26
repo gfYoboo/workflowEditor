@@ -1,0 +1,266 @@
+ul,
+li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+a,
+button {
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  text-decoration: none;
+}
+.qyui-cell {
+  flex: 1;
+  display: flex;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  min-width: 1px;
+  min-height: 1px;
+}
+
+.qyui-cell.wrap {
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -webkit-box-lines: multiple;
+  -moz-flex-wrap: wrap;
+}
+
+.qyui-cell.row {
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -moz-box-orient: vertical;
+  -moz-box-direction: normal;
+  margin-left: 0;
+  margin-right: 0;
+  min-height: 1px;
+}
+
+.qyui-cell.col {
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -moz-box-orient: horizontal;
+  -moz-box-direction: normal;
+  min-width: 1px;
+}
+
+.qyui-cell > .qyui-cell:not(.row):not(.col) {
+  flex: 0 1 auto;
+}
+
+/*直接指定的card*/
+.qyui-card {
+  flex: 1;
+  display: flex;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+
+  border: 1px solid #cccccc;
+  box-sizing: border-box;
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -moz-box-orient: vertical;
+  -moz-box-direction: normal;
+  margin-left: 0;
+  margin-right: 0;
+  min-width: 1px;
+  min-height: 1px;
+}
+
+.qyui-card-title {
+  height: 34px;
+  line-height: 34px;
+  padding-left: 12px;
+  border-bottom: 1px solid #e7eaf0;
+  /*box-sizing: border-box;*/
+  background: #f4f6f9;
+  display: flex;
+  flex: 0 1 auto;
+}
+
+.qyui-card-body {
+  flex: 1;
+  display: flex;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+
+  flex-direction: column;
+  -webkit-flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -moz-box-orient: vertical;
+  -moz-box-direction: normal;
+  margin-left: 0;
+  margin-right: 0;
+
+  height: 100%;
+  width: 100%;
+}
+
+.qyui-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.pd2 {
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.pd4 {
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.bd {
+  border: 1px solid #dddddd;
+  box-sizing: border-box;
+}
+
+.bdl {
+  border-left: 1px solid #dddddd;
+  box-sizing: border-box;
+}
+
+.bdr {
+  border-right: 1px solid #dddddd;
+  box-sizing: border-box;
+}
+
+.bdb {
+  border-bottom: 1px solid #dddddd;
+  box-sizing: border-box;
+}
+
+.bdt {
+  border-top: 1px solid #dddddd;
+  box-sizing: border-box;
+}
+
+.bd-ccc {
+  border-color: #ccc;
+}
+
+.fr {
+  float: right !important;
+}
+
+.fl {
+  float: left !important;
+}
+
+.pr-5 {
+  padding-right: 5px;
+}
+
+.pl-5 {
+  padding-left: 5px;
+}
+
+.block {
+  display: block;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.bd-blue {
+  border-color: #307ecc;
+}
+
+.bg-f5 {
+  background: #f5f5f5;
+}
+
+.card-box {
+  border: 1px solid #ccc;
+  box-shadow: none;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+.card-header {
+  position: relative;
+  height: 34px;
+  line-height: 33px;
+  border-bottom: 1px solid #ddd;
+  color: #111111;
+  padding-left: 12px;
+  box-sizing: content-box;
+}
+
+.card-body {
+  background-color: #fff;
+}
+
+.qyui-ul {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+
+.qyui-ul li {
+  height: 36px;
+  padding: 2px;
+  line-height: 36px;
+  text-align: left;
+  overflow: hidden;
+  padding-left: 10px;
+  width: 100%;
+  cursor: pointer;
+  border-bottom: 1px solid #cccccc;
+  box-sizing: border-box;
+}
+
+.qyui-ul li.active {
+  background-color: #fff3a1;
+}
+
+.el-dialog__header {
+  background-color: #3c93dc;
+  padding: 0 80px 0 20px !important;
+  height: 42px;
+  line-height: 42px;
+  font-size: 14px;
+  color: #fff;
+  border-bottom: 1px solid #eee;
+  overflow: hidden;
+  border-radius: 2px 2px 0 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.el-dialog__body {
+  padding: 5px 10px !important;
+}
+
+.el-dialog__headerbtn {
+  top: 10px !important;
+  right: 15px !important;
+  font-size: 20px !important;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+  color: #fff !important;
+}
+.el-form-item {
+  margin-bottom: 6px !important;
+}
