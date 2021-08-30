@@ -30,7 +30,7 @@ export default {
         },
         editNode({ commit, rootState }, dbid) {
             if (!rootState.WorkFlowInfo.DocTypeName) {
-                ElMessage({ message: "请先选择单据类型", type: "warning" })
+                ElMessage({ message: "请先配置流程属性，选择单据类型", type: "warning" })
             }
             else {
                 //设置当前节点

@@ -93,7 +93,7 @@ export default {
     }
   },
   mounted() {
-
+    console.log(import.meta.env.MODE);
     //初始化画布
     this.graph = initGraph();
     //注册工具
@@ -112,15 +112,12 @@ export default {
   },
   methods: {
     async init() {
+      this.$store.dispatch("GetBasic");
       let WorkFlowId = this.getQueryString("id");
       if (WorkFlowId === "") {
-        this.$message({
-          message: '没有找到传入的参数',
-          type: 'error'
-        });
+        WorkFlowId = "0"
       }
-      else if (WorkFlowId === "0") {
-        this.$store.dispatch("GetBasic");
+      if (WorkFlowId === "0") {
         this.$store.dispatch("createNewWorkFlowInfo").then(() => {
           initNewWorkFlow(this.graph);
         });
@@ -141,14 +138,14 @@ export default {
     },
     handleSave() {
       //梳理下节点上的nodex和nodeY
-      let nodes = this.graph.getNodes(); 
+      let nodes = this.graph.getNodes();
       nodes.forEach(node => {
         if (node.shape === "start" || node.shape === "normal" || node.shape === "end") {
           let index = this.NodeList.findIndex(flownode => flownode.DBID === node.getData().DBID);
           this.NodeList[index].NodeX = node.position().x;
           this.NodeList[index].NodeY = node.position().y;
-        } 
-      }) 
+        }
+      })
       validate();
     },
     handleWorkFlow() {

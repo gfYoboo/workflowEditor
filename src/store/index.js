@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import request from "@/utils/request";
+import { GetBasic, GetWorkFlowInfo } from "@/api/workflow";
 
 import flow from './modules/flow'
 import node from './modules/node'
@@ -111,18 +111,18 @@ export default createStore({
             const index = state.ConditionList.findIndex(edge => edge.DBID === data.DBID)
             Object.assign(state.ConditionList[index], data);
         },
-        changeCondPoint(state, data) { 
+        changeCondPoint(state, data) {
             const index = state.ConditionList.findIndex(edge => edge.DBID === data.DBID)
             Object.assign(state.ConditionList[index], data);
         }
     },
     actions: {
         async GetBasic({ commit }) {
-            const res = await request({ url: "/api/WorkFlow/GetBasic", method: "GET" })
+            const res = await GetBasic()
             commit('setBasic', res);
         },
-        async GetWorkFlowInfo({ commit }, data) {
-            const res = await request({ url: "/api/WorkFlow/GetWorkFlowInfo", method: "GET", params: { WorkFlowId: data } });
+        async GetWorkFlowInfo({ commit }, workFlowId) {
+            const res = await GetWorkFlowInfo(workFlowId);
             commit('setWorkFlowInfo', res);
             commit('setSheetWindowName');
         },

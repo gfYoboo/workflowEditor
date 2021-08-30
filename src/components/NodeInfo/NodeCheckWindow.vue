@@ -44,6 +44,8 @@
 
 <script>
 import { mapState } from "vuex";
+import { CheckOperationPurviewListByDocType } from '@/api/workflow';
+
 export default {
   data() {
     return {
@@ -63,10 +65,7 @@ export default {
   methods: {
     async initCheckWindowFactor() {
       this.CheckWindowFactorList = [];
-      const list = await this.$http({
-        url: "/api/WorkFlow/CheckOperationPurviewListByDocType",
-        data: { DocType: this.WorkFlowInfo.DocTypeName }
-      })
+      const list = await CheckOperationPurviewListByDocType(this.WorkFlowInfo.DocTypeName)
       list.forEach(windiwName => {
         let item = {
           WindowName: windiwName,

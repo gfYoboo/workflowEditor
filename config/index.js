@@ -6,5 +6,9 @@ export default {
   production: {
     baseUrl: "../../", // 正式接口域名
     basePath: ""
+  },
+  demo: {
+    baseUrl: "/", // 演示
+    basePath: ""
   }
 }

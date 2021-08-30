@@ -16,13 +16,13 @@ export default (graph) => {
     shape: "duty",
   });
   const source = graph.addNode({
-    x: 410,
+    x: 415,
     y: 165,
     shape: "start",
   });
 
   const target = graph.addNode({
-    x: 410,
+    x: 415,
     y: 235,
     shape: "end",
   });

@@ -43,7 +43,7 @@
 
 <script>
 import { mapState } from "vuex";
-
+import { CheckFactorListByDocType } from '@/api/workflow';
 export default {
   data() {
     return {
@@ -59,11 +59,8 @@ export default {
   },
   methods: {
     async initCheckFactor() {
-      this.CheckFactorList=[];
-      const list = await this.$http({
-        url: "/api/WorkFlow/CheckFactorListByDocType",
-        data: { DocType: this.WorkFlowInfo.DocTypeName }
-      })
+      this.CheckFactorList = [];
+      const list = await CheckFactorListByDocType(this.WorkFlowInfo.DocTypeName)
       list.forEach(dispunit => {
         let item = {
           DispUnit: dispunit,

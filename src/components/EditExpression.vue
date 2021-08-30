@@ -123,7 +123,7 @@
 
 <script>
 import { mapState } from "vuex";
-
+import { GetExpressionOperatorList, ValidateExpression, GetSheetWindowMainCardModel } from '@/api/expression'
 export default {
   data() {
     return {
@@ -181,6 +181,7 @@ export default {
       this.showDlg = false;
     },
     dlgOpen() {
+      this.$store.commit("setSheetWindowName")
       this.SheetWindowName = this.DocTypeInfo.sheetname
       this.Expression = this.ExpressionStore;
       this.PsmExpression = this.PsmExpressionStore;
@@ -189,11 +190,11 @@ export default {
     },
     async init() {
       if (this.OperatorList.length === 0) {
-        const res = await this.$http({ url: "/api/Common/GetExpressionOperatorList", data: { runType: 'Server' } })
+        const res = await GetExpressionOperatorList()
         this.OperatorList = res.Data;
       }
       if (this.funcTreeData.length === 0) {
-        const res_func = await this.$http({ url: "/api/Common/GetExpressionFunctionList", data: { runType: 'Server' } });
+        const res_func = await GetExpressionOperatorList()
         if (res_func.Success && res_func.Data && res_func.Data.length > 0) {
           let funcList = []
           res_func.Data.forEach((item) => {
@@ -215,8 +216,7 @@ export default {
         ]
       }
 
-      let dataTree = await this.GetSheetWindowMainCardModel(this.SheetWindowName, this.UseEnName);
-      console.log(dataTree);
+      let dataTree = await this.GetSheetWindowMainCardModel();
       dataTree.forEach((item) => {
         item.label = item.title
         item.children.forEach(child => {
@@ -227,14 +227,8 @@ export default {
 
 
     },
-    async GetSheetWindowMainCardModel(sheetWindowName, useEnName) {
-      const backInfo = await this.$http({
-        url: "/api/Model/GetSheetWindowMainCardModel",
-        data: {
-          SheetWindowName: sheetWindowName,
-          UseEnName: useEnName ? true : false
-        }
-      });
+    async GetSheetWindowMainCardModel() {
+      const backInfo = await GetSheetWindowMainCardModel(this.SheetWindowName, this.UseEnName)
 
       if (backInfo) {
         let CardModelList = [];
@@ -375,7 +369,7 @@ export default {
         RunOnServer: true,
         RunAsJS: false
       };
-      let res = await this.$http({ url: "/api/Expression/ValidateExpression", data: param });
+      let res = await ValidateExpression(param);
       if (res && res.Code === "S") {
         let info = res.data
         let psm = info.PSM;

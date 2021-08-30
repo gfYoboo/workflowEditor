@@ -11,7 +11,7 @@
              width="610px">
     <el-alert v-if="currentSelectedUser && currentSelectedUser.UserCode"
               style="margin: 10px 0"
-               v-model="currentSelectedUser"
+              v-model="currentSelectedUser"
               :closable="false"
               type="info">
       <template #title>
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import { GetUserList } from "@/api/workflow"
 export default {
   emits: ["selected"],
   data() {
@@ -93,10 +94,7 @@ export default {
     },
     // 弹窗之后，在opened里加载数据
     async loadUserList() {
-      const res = await this.$http({
-        url: "/api/workflow/GetUserList",
-        data: { page: this.currentPage, text: this.UserListSearchKey },
-      });
+      const res = await GetUserList(this.currentPage, this.UserListSearchKey)
       this.UserTableData = res.list
       this.total = res.total
     },

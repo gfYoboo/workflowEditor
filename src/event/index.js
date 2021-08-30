@@ -1,5 +1,5 @@
 import store from '@/store/index';
-import { addDuty, addNode, deleteNode, addCond, updateCond, deleteCond } from "@/utils/addNew"
+import { addDuty, addNode, deleteNode, addCond, updateCond, deleteCond } from "@/common/flowDataOp"
 export default function (graph) {
 
     graph.on("node:added", ({ cell, index, options }) => {
