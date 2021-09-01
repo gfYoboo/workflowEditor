@@ -36,7 +36,7 @@ export default createStore({
     mutations: {
         setBasic(state, data) {
             state.DocTypeAndWindowList = data.DocTypeAndWindowList;
-            state.ClientFunctionList = data.ClentFuntionList;
+            state.ClientFunctionList = data.ClientFuntionList;
             state.ServerFunctionList = data.ServerFunctionList;
             state.UserInfoList = data.UserInfoList;
             state.NodeUserDesList = data.NodeUserDesList;

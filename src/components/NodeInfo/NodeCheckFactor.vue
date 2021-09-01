@@ -1,41 +1,24 @@
 <template>
   <div class="fr">
-    <el-button type="success"
-               @click="handleReset">重新设置</el-button>
+    <el-button type="success" @click="handleReset">重新设置</el-button>
   </div>
-  <el-table :data="CheckFactorList"
-            height="350"
-            border
-            style="width: 100%">
-    <el-table-column prop="DispUnit"
-                     label="单据字段"
+  <el-table :data="CheckFactorList" border height="350" style="width: 100%">
+    <el-table-column prop="DispUnit" label="单据字段"
                      show-overflow-tooltip>
     </el-table-column>
-    <el-table-column label="是否可修改"
-                     width="90"
-                     align="center">
+    <el-table-column label="是否可修改" width="90" align="center">
       <template #default="scope">
-        <el-checkbox v-model="scope.row.CanEdit"
-                     true-label="Y"
-                     false-label="N"></el-checkbox>
+        <el-checkbox v-model="scope.row.CanEdit" true-label="Y" false-label="N"></el-checkbox>
       </template>
     </el-table-column>
-    <el-table-column label="是否必填"
-                     width="70"
-                     align="center">
+    <el-table-column label="是否必填" width="70" align="center">
       <template #default="scope">
-        <el-checkbox v-model="scope.row.NotNullable"
-                     true-label="Y"
-                     false-label="N"></el-checkbox>
+        <el-checkbox v-model="scope.row.NotNullable" true-label="Y" false-label="N"></el-checkbox>
       </template>
     </el-table-column>
-    <el-table-column label="是否隐藏"
-                     width="70"
-                     align="center">
+    <el-table-column label="是否隐藏" width="70" align="center">
       <template #default="scope">
-        <el-checkbox v-model="scope.row.IsHidden"
-                     true-label="Y"
-                     false-label="N"></el-checkbox>
+        <el-checkbox v-model="scope.row.IsHidden" true-label="Y" false-label="N"></el-checkbox>
       </template>
     </el-table-column>
   </el-table>
@@ -43,7 +26,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { CheckFactorListByDocType } from '@/api/workflow';
+import { GetCheckFactorList } from '@/api/workflow';
 export default {
   data() {
     return {
@@ -52,7 +35,8 @@ export default {
   },
   computed: mapState({
     node: (state) => state.node.CurrentNode,
-    WorkFlowInfo: (state) => state.WorkFlowInfo
+    WorkFlowInfo: (state) => state.WorkFlowInfo,
+    DocTypeInfo: (state) => state.DocTypeInfo
   }),
   mounted() {
     this.initCheckFactor();
@@ -60,7 +44,8 @@ export default {
   methods: {
     async initCheckFactor() {
       this.CheckFactorList = [];
-      const list = await CheckFactorListByDocType(this.WorkFlowInfo.DocTypeName)
+      debugger;
+      const list = await GetCheckFactorList(this.DocTypeInfo.sheetname)
       list.forEach(dispunit => {
         let item = {
           DispUnit: dispunit,

@@ -19,16 +19,16 @@ export function GetUserList(page, search) {
     });
 }
 
-export function CheckFactorListByDocType(DocType) {
+export function GetCheckFactorList(sheetName) {
     return request({
-        url: "/api/workflow/CheckFactorListByDocType",
-        data: { DocType: DocType }
+        url: "/api/workflow/GetCheckFactorList",
+        data: { SheetWindowName: sheetName }
     })
 }
 
-export function CheckOperationPurviewListByDocType(DocType) {
+export function GetCheckOperationPurviewList(sheetName) {
     return request({
-        url: "/api/workflow/CheckOperationPurviewListByDocType",
-        data: { DocType: DocType }
+        url: "/api/workflow/GetCheckOperationPurviewList",
+        data: { SheetWindowName: sheetName }
     })
 }

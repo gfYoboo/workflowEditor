@@ -44,7 +44,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { CheckOperationPurviewListByDocType } from '@/api/workflow';
+import { GetCheckOperationPurviewList } from '@/api/workflow';
 
 export default {
   data() {
@@ -55,6 +55,8 @@ export default {
   computed: mapState({
     node: (state) => state.node.CurrentNode,
     WorkFlowInfo: (state) => state.WorkFlowInfo,
+    DocTypeInfo: (state) => state.DocTypeInfo,
+
     tableRowClassName() {
       return "";
     },
@@ -65,10 +67,10 @@ export default {
   methods: {
     async initCheckWindowFactor() {
       this.CheckWindowFactorList = [];
-      const list = await CheckOperationPurviewListByDocType(this.WorkFlowInfo.DocTypeName)
-      list.forEach(windiwName => {
+      const list = await GetCheckOperationPurviewList(this.DocTypeInfo.sheetname)
+      list.forEach(windowName => {
         let item = {
-          WindowName: windiwName,
+          WindowName: windowName,
           AddAble: "N",
           DeleteAble: "N",
           EditAble: "N",

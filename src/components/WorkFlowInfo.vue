@@ -112,7 +112,7 @@ export default {
     },
     handleConfirm() {
       this.$store.commit("updateFlow", this.flow)
-
+      this.$store.commit("setSheetWindowName")
       this.showDlg = false;
     },
     handleCancel() {
