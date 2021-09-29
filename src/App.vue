@@ -1,5 +1,5 @@
 <template>
-  <FlowEditor></FlowEditor>
+  <FlowEditor />
 </template>
 
 <script setup>

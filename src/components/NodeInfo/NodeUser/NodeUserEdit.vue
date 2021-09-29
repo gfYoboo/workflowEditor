@@ -1,75 +1,68 @@
 <template>
-  <el-dialog v-model="NodeUserDialogVisible"
-             title="审批用户编辑"
-             :close-on-click-modal="false"
-             :close-on-press-escape="false"
-             @closed="handleNodeUserDialogClosed"
-             destroy-on-close
-             width="610px">
-    <el-form v-if="currentNodeUserEdit"
-             label-position="right"
-             label-width="120px">
+  <el-dialog
+    v-model="NodeUserDialogVisible"
+    title="审批用户编辑"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    destroy-on-close
+    width="610px"
+    @closed="handleNodeUserDialogClosed"
+  >
+    <el-form v-if="currentNodeUserEdit" label-position="right" label-width="120px">
       <el-form-item label="用户编码">
-        <el-input v-model="currentNodeUserEdit.UserCode"
-                  class="input-with-select"
-                  readonly>
+        <el-input v-model="currentNodeUserEdit.UserCode" class="input-with-select" readonly>
           <template #append>
-            <el-button icon="el-icon-search"
-                       @click="showUserListDialog"></el-button>
+            <el-button icon="el-icon-search" @click="showUserListDialog" />
           </template>
         </el-input>
       </el-form-item>
       <el-form-item label="用户名称">
-        <el-input v-model="currentNodeUserEdit.UserName"
-                  readonly></el-input>
+        <el-input v-model="currentNodeUserEdit.UserName" readonly />
       </el-form-item>
       <el-form-item label="科室名称">
-        <el-input v-model="currentNodeUserEdit.OrgName"
-                  readonly></el-input>
+        <el-input v-model="currentNodeUserEdit.OrgName" readonly />
       </el-form-item>
       <el-form-item label="单位名称">
-        <el-input v-model="currentNodeUserEdit.ComName"
-                  readonly></el-input>
+        <el-input v-model="currentNodeUserEdit.ComName" readonly />
       </el-form-item>
       <el-form-item label="是否本单位审批">
-        <el-switch v-model="currentNodeUserEdit.DoesOwnCompany"
-                   active-color="#13ce66"
-                   inactive-color="#DCDFE6"
-                   active-value="Y"
-                   inactive-value="N">
-        </el-switch>
+        <el-switch
+          v-model="currentNodeUserEdit.DoesOwnCompany"
+          active-color="#13ce66"
+          inactive-color="#DCDFE6"
+          active-value="Y"
+          inactive-value="N"
+        />
       </el-form-item>
       <el-form-item label="审批条件">
-        <el-input placeholder="请输入内容"
-                  v-model="currentNodeUserEdit.ConPIM"
-                  class="input-with-select"
-                  :readonly="true">
+        <el-input
+          v-model="currentNodeUserEdit.ConPIM"
+          placeholder="请输入内容"
+          class="input-with-select"
+          :readonly="true"
+        >
           <template #append>
-            <el-button icon="el-icon-edit"
-                       @click="showExpDialog"></el-button>
+            <el-button icon="el-icon-edit" @click="showExpDialog" />
           </template>
-
         </el-input>
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="NodeUserDialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-                   @click="saveNodeUser()">确 定</el-button>
+        <el-button type="primary" @click="saveNodeUser()">确 定</el-button>
       </span>
     </template>
   </el-dialog>
 
-  <popSelectUser ref="popSelectUser"
-                 @selected="selectedUser"></popSelectUser>
+  <popSelectUser ref="popSelectUser" @selected="selectedUser" />
 </template>
 
 <script>
-import PopSelectUser from './PopSelectUser.vue'
+import PopSelectUser from "./PopSelectUser.vue";
 export default {
-  emits: ["save"],
   components: { PopSelectUser },
+  emits: ["save"],
   data() {
     return {
       NodeUserDialogVisible: false,
@@ -83,16 +76,15 @@ export default {
         ConPIM: "",
         ConPSM: "",
         ConPara: "",
-        ID: ""
+        ID: "",
       },
-    }
+    };
   },
   methods: {
     show(row) {
       if (row) {
         this.currentNodeUserEdit = JSON.parse(JSON.stringify(row));
-      }
-      else {
+      } else {
         this.currentNodeUserEdit = {
           UserName_xID: "",
           UserCode: "",
@@ -103,14 +95,14 @@ export default {
           ConPIM: "",
           ConPSM: "",
           ConPara: "",
-          ID: this.$store.getters.getNextId
-        }
+          ID: this.$store.getters.getNextId,
+        };
       }
       this.NodeUserDialogVisible = true;
     },
     // 保存审批用户
     saveNodeUser() {
-      this.$emit("save", this.currentNodeUserEdit)
+      this.$emit("save", this.currentNodeUserEdit);
       this.NodeUserDialogVisible = false;
     },
     showExpDialog() {
@@ -120,18 +112,17 @@ export default {
           PsmExpression: this.currentNodeUserEdit.ConPSM,
           ParameterXml: this.currentNodeUserEdit.ConPara,
           ResultType: "Boolean",
-          callback: this.callbackExp
-        })
+          callback: this.callbackExp,
+        });
     },
     callbackExp(data) {
       this.currentNodeUserEdit.ConPIM = data.Expression;
       this.currentNodeUserEdit.ConPSM = data.PsmExpression;
       this.currentNodeUserEdit.ConPara = data.ParameterXml;
-
     },
     // 显示选择用户的列表（并加载数据）
     showUserListDialog() {
-      this.$refs["popSelectUser"].show();
+      this.$refs.popSelectUser.show();
     },
     // 关闭编辑“审批人”的窗口
     handleNodeUserDialogClosed() {
@@ -144,10 +135,7 @@ export default {
       this.currentNodeUserEdit.UserName = row.UserName;
       this.currentNodeUserEdit.OrgName = row.OrgName;
       this.currentNodeUserEdit.ComName = row.Company;
-    }
+    },
   },
-}
+};
 </script>
-
-<style>
-</style>

@@ -1,21 +1,20 @@
 <template>
-  <el-dialog title="错误信息"
-             v-model="showDlg"
-             width="500px"
-             :close-on-click-modal="false"
-             :before-close="BeforeClose"
-             destroy-on-close>
+  <el-dialog
+    v-model="showDlg"
+    title="错误信息"
+    width="500px"
+    :close-on-click-modal="false"
+    :before-close="BeforeClose"
+    destroy-on-close
+  >
     <ul class="qyui-ul">
-      <template v-for="(item) in ErrorCollection"
-                :key="item">
-        <li class="noheight">错误:{{item}}</li>
+      <template v-for="(item) in ErrorCollection" :key="item">
+        <li class="noheight">错误:{{ item }}</li>
       </template>
-      <template v-for="(item) in WarningCollection"
-                :key="item">
-        <li class="noheight">警告:{{item}}</li>
+      <template v-for="(item) in WarningCollection" :key="item">
+        <li class="noheight">警告:{{ item }}</li>
       </template>
     </ul>
-
   </el-dialog>
 </template>
 
@@ -25,7 +24,7 @@ export default {
   data() {
     return {
 
-    }
+    };
   },
   computed: {
     ...mapState({
@@ -38,37 +37,35 @@ export default {
         return this.ShowValidateDlg;
       },
       set(data) {
-        this.$store.commit('validate/setValidateDlgState', data)
-      }
+        this.$store.commit("validate/setValidateDlgState", data);
+      },
     },
   },
   methods: {
     BeforeClose(done) {
       if (this.ErrorCollection.length > 0) {
         done();
-      }
-      else if (this.WarningCollection.length > 0) {
+      } else if (this.WarningCollection.length > 0) {
         this.$msgbox({
-          title: '提示',
-          message: '是否继续保存当前流程',
+          title: "提示",
+          message: "是否继续保存当前流程",
           showCancelButton: true,
-          confirmButtonText: 'confirm',
-          cancelButtonText: 'cancel',
+          confirmButtonText: "confirm",
+          cancelButtonText: "cancel",
 
         }).then(action => {
           if (action === "confirm") {
-            this.$store.dispatch("validate/SaveWorkFlow")
+            this.$store.dispatch("validate/SaveWorkFlow");
           }
         });
-      }
-      else {
-        this.$store.dispatch("validate/SaveWorkFlow")
+      } else {
+        this.$store.dispatch("validate/SaveWorkFlow");
       }
     },
 
   },
 
-}
+};
 </script>
 
 <style>

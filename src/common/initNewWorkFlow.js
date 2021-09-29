@@ -1,5 +1,5 @@
 export default (graph) => {
-  //新建流程自动创建开始 结束节点
+  // 新建流程自动创建开始 结束节点
   graph.addNode({
     x: 0,
     y: 140,
@@ -15,15 +15,16 @@ export default (graph) => {
     height: 70,
     shape: "duty",
   });
-  const source = graph.addNode({
+  graph.addNode({
     x: 415,
     y: 165,
     shape: "start",
   });
 
-  const target = graph.addNode({
+  graph.addNode({
     x: 415,
     y: 235,
     shape: "end",
   });
 }
+;
