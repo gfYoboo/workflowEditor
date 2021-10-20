@@ -43,7 +43,9 @@ export default () => {
     },
     connecting: {
       anchor: "center",
-      connectionPoint: "anchor",
+      connectionPoint: {
+        name: "boundary",
+      },
       // 自动吸附
       snap: {
         radius: 20,
@@ -64,7 +66,7 @@ export default () => {
       router: {
         name: "manhattan",
         args: {
-          step: 3,
+          step: 5,
           excludeShapes: ["duty", "dutyorg", "dutydes"],
         },
       },
@@ -105,39 +107,6 @@ export default () => {
       showEdgeSelectionBox: false,
       filter: ["shapeimg", "shapetext", "duty"],
     },
-    // connecting: {
-    //   createEdge() {
-    //     return new Shape.Edge({
-    //       attrs: {
-    //         line: {
-    //           stroke: '#000',
-    //           strokeWidth: 1,
-    //           targetMarker: {
-    //             name: 'block',
-    //             width: 12,
-    //             height: 8,
-    //           },
-    //         },
-    //       },
-    //       zIndex: 0,
-    //     })
-    //   },
-    //   validateConnection({ targetMagnet }) {
-    //     return !!targetMagnet
-    //   },
-    // },
   });
-
-  // graph.addEdge({
-  //     source,
-  //     target,
-  //     router: {
-  //         name: 'orth',
-  //         args: {
-
-  //         },
-  //     },
-  // })
-
   return graph;
 };

@@ -146,7 +146,7 @@ export default function(graph) {
         args: {
           tagName: "circle",
           attrs: {
-            r: 4,
+            r: 2,
             stroke: "#fe854f",
             "stroke-width": 2,
             fill: "red",
@@ -179,6 +179,7 @@ export default function(graph) {
           strokeWidth: 2,
         });
       } else {
+        cell.toFront();
         cell.attr("line/stroke", "#ffa940");
       }
     });

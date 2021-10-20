@@ -50,11 +50,11 @@ export default {
           title: "提示",
           message: "是否继续保存当前流程",
           showCancelButton: true,
-          confirmButtonText: "confirm",
-          cancelButtonText: "cancel",
-
+          confirmButtonText: "确认",
+          cancelButtonText: "取消",
         }).then(action => {
           if (action === "confirm") {
+            done();
             this.$store.dispatch("validate/SaveWorkFlow");
           }
         });

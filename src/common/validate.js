@@ -225,7 +225,8 @@ function ExistloopOfWorkFlow() {
         NeedDeletedConTemp = [];//
 
         workFlowConditionList.forEach(con => {
-          if (con.NodeFrom_XID === de) {
+          // fixed 这里nodeHt key会变成String类型 转成同等类型比较
+          if (Number(con.NodeFrom_XID) === Number(de)) {
             NeedDeletedConTemp.push(con);
           }
         });
