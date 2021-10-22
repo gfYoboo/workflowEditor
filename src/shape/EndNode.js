@@ -3,7 +3,7 @@ export default class EndNode extends Shape.Rect {
 }
 EndNode.config({
   width: 80,
-  height: 40,
+  height: 36,
   zIndex: 100,
   label: "结 束",
   attrs: {

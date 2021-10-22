@@ -26,6 +26,16 @@ export default {
 
   },
   actions: {
+    beforeSave({ commit, state, dispatch }) {
+      return new Promise((resolve, reject) => {
+        if (state.ErrorCollection.length === 0 && state.WarningCollection.length === 0) {
+          resolve();
+        } else {
+          commit("setValidateDlgState", true);
+          reject(new Error(""));
+        }
+      });
+    },
     async SaveWorkFlow({ state, rootState }) {
       const res = await request(
         {

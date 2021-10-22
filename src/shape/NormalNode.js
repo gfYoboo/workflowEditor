@@ -4,7 +4,7 @@ export default class NormalNode extends Shape.Rect {
 }
 NormalNode.config({
   width: 80,
-  height: 40,
+  height: 34,
   zIndex: 100,
   label: "节 点",
   attrs: {

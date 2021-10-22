@@ -161,26 +161,24 @@ export default {
           this.NodeList[index].NodeY = node.position().y;
         }
       });
-      validate().then(({ ErrorCollection, WarningCollection }) => {
-        if (ErrorCollection.length === 0 && WarningCollection.length === 0) {
-          this.$store.dispatch("validate/SaveWorkFlow").then(res => {
-            if (res) {
-              this.$message({
-                message: res,
-                type: "warning",
+      validate().then(() => {
+        this.$store.dispatch("validate/SaveWorkFlow").then(res => {
+          if (res) {
+            this.$message({
+              message: res,
+              type: "warning",
 
-              });
-            } else {
-              this.$message({
-                message: "保存成功",
-                type: "success",
-              });
-            }
-            this.loading = false;
-          });
-        } else {
-          this.$store.commit("validate/setValidateDlgState", true);
-        }
+            });
+          } else {
+            this.$message({
+              message: "保存成功",
+              type: "success",
+            });
+          }
+          this.loading = false;
+        });
+      }).catch(res => {
+        this.loading = false;
       });
     },
     handleWorkFlow() {
