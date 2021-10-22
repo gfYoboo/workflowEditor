@@ -2,19 +2,17 @@
   <el-form label-width="110px">
     <el-row v-if="node.NodeType !== 'End'">
       <nodeExtInput label="服务端处理功能(流转前)" field="ProcedureName" @select="PopSelect('ProcedureName')" />
-      <nodeExtInput
-        label="服务端处理功能(流转后)"
-        field="ProcedureAfter"
-        @select="PopSelect('ProcedureAfter')"
-      />
+      <nodeExtInput label="服务端处理功能(流转后)" field="ProcedureAfter" @select="PopSelect('ProcedureAfter')" />
     </el-row>
-    <el-row v-if="node.NodeType !== 'End'">
+    <el-row>
       <nodeExtInput
+        v-if="node.NodeType === 'Normal'"
         label="服务端处理功能(退回前)"
         field="ProcedureBeforeReject"
         @select="PopSelect('ProcedureBeforeReject')"
       />
       <nodeExtInput
+        v-if="node.NodeType === 'Normal'"
         label="服务端处理功能(退回后)"
         field="ProcedureAfterReject"
         @select="PopSelect('ProcedureAfterReject')"
@@ -48,12 +46,12 @@
     </el-row>
     <el-row v-if="node.NodeType !== 'End'">
       <nodeExtInput
-        label="客户端处理功能(流转前)"
+        label="客户端处理功能(提交、审批前)"
         field="ProcessVoucher"
         @select="PopSelectClient('ProcessVoucher')"
       />
       <nodeExtInput
-        label="客户端处理功能(流转后)"
+        label="客户端处理功能(提交、审批后)"
         field="ExecutiveAfter"
         @select="PopSelectClient('ExecutiveAfter')"
       />

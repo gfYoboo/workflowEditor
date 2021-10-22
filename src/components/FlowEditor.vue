@@ -1,5 +1,5 @@
 <template>
-  <div class="qyui-cell row qyui-container">
+  <div v-loading="loading" class="qyui-cell row qyui-container">
     <div class="qyui-cell bdb" style="height: 60px">
       <div style="padding: 10px 20px">
         <el-button type="primary" @click="handleSave">保存</el-button>
@@ -74,6 +74,7 @@ export default {
     return {
       graph: null,
       DicWorkFlowNoteList: [],
+      loading: true,
     };
   },
   computed: {
@@ -127,11 +128,13 @@ export default {
       if (WorkFlowId === "0") {
         this.$store.dispatch("createNewWorkFlowInfo").then(() => {
           initNewWorkFlow(this.graph);
+          this.loading = false;
         });
       } else {
         this.$store.dispatch("GetBasic");
         this.$store.dispatch("GetWorkFlowInfo", WorkFlowId).then(() => {
           initWorkFlow(this.graph);
+          this.loading = false;
         });
       }
     },
@@ -142,6 +145,7 @@ export default {
       return a[1];
     },
     handleSave() {
+      this.loading = true;
       // 梳理下节点上的nodex和nodeY
       const nodes = this.graph.getNodes();
       nodes.forEach((node) => {
@@ -157,7 +161,27 @@ export default {
           this.NodeList[index].NodeY = node.position().y;
         }
       });
-      validate();
+      validate().then(({ ErrorCollection, WarningCollection }) => {
+        if (ErrorCollection.length === 0 && WarningCollection.length === 0) {
+          this.$store.dispatch("validate/SaveWorkFlow").then(res => {
+            if (res) {
+              this.$message({
+                message: res,
+                type: "warning",
+
+              });
+            } else {
+              this.$message({
+                message: "保存成功",
+                type: "success",
+              });
+            }
+            this.loading = false;
+          });
+        } else {
+          this.$store.commit("validate/setValidateDlgState", true);
+        }
+      });
     },
     handleWorkFlow() {
       this.$store.commit("flow/setFlowDlgState", true);

@@ -8,9 +8,9 @@
       </el-select>
     </el-form-item>
     <el-form-item label="选择审批用户">
-      <el-select v-model="node.AppointUser" clearable placeholder>
+      <el-select v-model="node.AppointUserID" clearable placeholder>
         <template v-for="item in RelationList" :key="item.value">
-          <el-option :value="item.label" />
+          <el-option :label="item.label" :value="item.value" />
         </template>
       </el-select>
     </el-form-item>

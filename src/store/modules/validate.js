@@ -26,13 +26,6 @@ export default {
 
   },
   actions: {
-    beforeSave({ commit, state, dispatch }) {
-      if (state.ErrorCollection.length === 0 && state.WarningCollection.length === 0) {
-        dispatch("SaveWorkFlow");
-      } else {
-        commit("setValidateDlgState", true);
-      }
-    },
     async SaveWorkFlow({ state, rootState }) {
       const res = await request(
         {
@@ -44,18 +37,7 @@ export default {
             WorkFlowNoteList: rootState.WorkFlowNoteList,
           },
         });
-      if (res) {
-        ElMessage({
-          message: res,
-          type: "warning",
-
-        });
-      } else {
-        ElMessage({
-          message: "保存成功",
-          type: "success",
-        });
-      }
+      return res;
     },
   },
 }
