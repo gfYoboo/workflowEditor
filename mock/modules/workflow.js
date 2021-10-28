@@ -68,4 +68,11 @@ export default [
       return ["行程信息", "本单位报销人员信息", "外部报销人员信息", "公务卡结算", "其他结算"];
     },
   },
+  {
+    url: "/api/workflow/SaveWorkFlow",
+    method: "post",
+    response: () => {
+      return { Code: "S", $code: "S", Success: true, $msg: "", Message: "", Result: null, $result: null };
+    },
+  },
 ];

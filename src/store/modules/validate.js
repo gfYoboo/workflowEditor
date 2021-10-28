@@ -1,5 +1,4 @@
-import { ElMessage } from "element-plus";
-import request from "@/utils/request";
+
 export default {
   namespaced: true,
   state() {
@@ -29,26 +28,14 @@ export default {
     beforeSave({ commit, state, dispatch }) {
       return new Promise((resolve, reject) => {
         if (state.ErrorCollection.length === 0 && state.WarningCollection.length === 0) {
-          resolve();
+          resolve(true);
         } else {
           commit("setValidateDlgState", true);
-          reject(new Error(""));
+          resolve(false);
         }
       });
     },
-    async SaveWorkFlow({ state, rootState }) {
-      const res = await request(
-        {
-          url: "/api/workflow/SaveWorkFlow",
-          data: {
-            WorkFlowInfo: rootState.WorkFlowInfo,
-            NodeList: rootState.NodeList,
-            ConditionList: rootState.ConditionList,
-            WorkFlowNoteList: rootState.WorkFlowNoteList,
-          },
-        });
-      return res;
-    },
+
   },
 }
 ;

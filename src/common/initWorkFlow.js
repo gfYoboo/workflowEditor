@@ -66,7 +66,6 @@ export default (graph) => {
   //     ]
   // }
   // { "NoteName": "业务部门", "NoteName_Xid": "100000000", "DispX": "20", "DispY": "217", "Des": "" },
-
   store.state.WorkFlowNoteList.forEach(note => {
     graph.addNode({
       shape: "duty",
@@ -100,7 +99,6 @@ export default (graph) => {
       });
     } else {
       graph.addNode({
-
         shape: "normal",
         label: node.NodeName,
         x: Number(node.NodeX),

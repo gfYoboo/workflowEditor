@@ -28,7 +28,7 @@
     <nodeInfo />
     <edgeInfo />
     <editExpression />
-    <errorMsg />
+    <errorMsg @dosave="handleSaveWorkFlow" />
   </div>
 </template>
 
@@ -55,6 +55,7 @@ import InitialTemplate from "@/common/InitialTemplate";
 import { computed } from "vue";
 import { mapState } from "vuex";
 import { validate } from "@/common/validate";
+import { SaveWorkFlow } from "@/api/workflow";
 export default {
   components: {
     WorkFlowInfo,
@@ -160,24 +161,42 @@ export default {
           this.NodeList[index].NodeX = node.position().x;
           this.NodeList[index].NodeY = node.position().y;
         }
-      });
-      validate().then(() => {
-        this.$store.dispatch("validate/SaveWorkFlow").then(res => {
-          if (res) {
-            this.$message({
-              message: res,
-              type: "warning",
-
-            });
-          } else {
-            this.$message({
-              message: "保存成功",
-              type: "success",
-            });
+        if (
+          node.shape === "duty"
+        ) {
+          const index = this.WorkFlowNoteList.findIndex(
+            (note) => note.DBID === node.getData().DBID,
+          );
+          if (index > -1) {
+            this.WorkFlowNoteList[index].DispX = node.position().x;
+            this.WorkFlowNoteList[index].DispY = node.position().y;
           }
+        }
+      });
+      validate().then((flag) => {
+        if (flag) {
+          this.handleSaveWorkFlow();
+        } else {
           this.loading = false;
-        });
-      }).catch(res => {
+        }
+      });
+    },
+    handleSaveWorkFlow() {
+      // 重新计算
+      SaveWorkFlow(
+        {
+          WorkFlowInfo: this.WorkFlowInfo,
+          NodeList: this.NodeList,
+          ConditionList: this.ConditionList,
+          WorkFlowNoteList: this.WorkFlowNoteList,
+
+        }).then(res => {
+        if (res) {
+          this.$message({
+            message: "保存成功",
+            type: "success",
+          });
+        }
         this.loading = false;
       });
     },

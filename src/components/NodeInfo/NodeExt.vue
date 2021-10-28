@@ -121,7 +121,7 @@ export default {
         this.treeList.push(item);
       };
       if (this.node[fieldName]) {
-        this.list = this.node[fieldName].split("\n");
+        this.list = this.node[fieldName].split(";");
       } else {
         this.list = [];
       }
@@ -146,7 +146,7 @@ export default {
       }
     },
     handleConfirm() {
-      this.node[this.currentFieldName] = this.list.join("\n");
+      this.node[this.currentFieldName] = this.list.join(";");
       this.showDlg = false;
     },
     handleCancel() {

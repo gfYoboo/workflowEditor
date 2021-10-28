@@ -163,8 +163,7 @@ export function validate() {
   return store.dispatch("validate/beforeSave");
 }
 function CheckExecutive(list, name, errorinfo) {
-  const p = "\n";
-  const checklist = name.replace(new RegExp(p, "gm"), "&").split("&");
+  const checklist = name.split(";");
   checklist.forEach(str => {
     if (list.indexOf(str.trim()) === -1) {
       store.commit("validate/addError", errorinfo.replace("{0}", str.trim()));

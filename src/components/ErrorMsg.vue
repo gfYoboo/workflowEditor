@@ -21,6 +21,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
+  emits: ["dosave"],
   data() {
     return {
 
@@ -55,11 +56,11 @@ export default {
         }).then(action => {
           if (action === "confirm") {
             done();
-            this.$store.dispatch("validate/SaveWorkFlow");
+            this.$emit("dosave");
           }
         });
       } else {
-        this.$store.dispatch("validate/SaveWorkFlow");
+        this.$emit("dosave");
       }
     },
 

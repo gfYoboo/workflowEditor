@@ -32,3 +32,11 @@ export function GetCheckOperationPurviewList(sheetName) {
     data: { SheetWindowName: sheetName },
   });
 }
+
+export function SaveWorkFlow(data) {
+  return request(
+    {
+      url: "/api/workflow/SaveWorkFlow",
+      data,
+    });
+}

@@ -19,9 +19,9 @@
         <el-input v-model="flow.Name" placeholder="请输入流程名称" />
       </el-form-item>
       <el-form-item label="单据类型">
-        <el-select v-model="flow.DocTypeName" placeholder="请选择单据类型">
+        <el-select v-model="flow.DocTypeName" filterable placeholder="请选择单据类型">
           <el-option
-            v-for="item in DTypeList"
+            v-for="item in DocTypeList"
             :key="item"
             :label="item"
             :value="item"

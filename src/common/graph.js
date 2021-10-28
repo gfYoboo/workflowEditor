@@ -68,6 +68,7 @@ export default () => {
         args: {
           step: 5,
           excludeShapes: ["duty", "dutyorg", "dutydes"],
+
         },
       },
       connector: { name: "rounded" },
