@@ -10,12 +10,12 @@
       <div class="qyui-cell row qyui-container">
         <div class="qyui-cell row">
           <ul class="qyui-ul bd">
-            <template v-for="item in NoteList" :key="item.value">
+            <template v-for="item in NoteList" :key="item.ID">
               <li
-                :class="{ active: item.value === currentItem.value }"
+                :class="{ current: item.ID === currentItem.ID }"
                 @click="handleSelect(item)"
                 @dblclick="handleDbClick(item)"
-              >{{ item.label }}</li>
+              >{{ item.NoteName }}</li>
             </template>
           </ul>
         </div>
@@ -88,14 +88,14 @@ export default {
       if (cells.length) {
         const cell = cells[0];
         if (cell.shape === "dutyorg") {
-          cell.label = item?.label || "";
+          cell.label = item?.NoteName || "";
           // 获取他的父级
           const pcell = cell.getParent();
           // 根据职能带ID去更新数据
           this.$store.commit("updateDuty", {
             DBID: pcell.getData().DBID,
-            NoteName: item?.label || "",
-            NoteName_xID: item?.value || "",
+            NoteName: item?.NoteName || "",
+            NoteName_xID: item?.ID || "",
           });
         }
       }

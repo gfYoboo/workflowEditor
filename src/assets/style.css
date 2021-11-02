@@ -230,7 +230,7 @@ button {
   box-sizing: border-box;
 }
 
-.qyui-ul li.active {
+.qyui-ul li.current {
   background-color: #fff3a1;
 }
 

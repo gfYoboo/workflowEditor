@@ -4,6 +4,8 @@
       <div style="padding: 10px 20px">
         <el-button type="primary" @click="handleSave">保存</el-button>
         <el-button type="success" @click="handleWorkFlow">流程属性</el-button>
+        <el-button type="success" @click="handleWorkFlowNote">职能带维护</el-button>
+
       </div>
     </div>
     <div class="qyui-cell col">
@@ -29,6 +31,7 @@
     <edgeInfo />
     <editExpression />
     <errorMsg @dosave="handleSaveWorkFlow" />
+    <WorkflowNote></WorkflowNote>
   </div>
 </template>
 
@@ -43,6 +46,7 @@ import DutyDesInfo from "./Duty/DutyDesInfo.vue";
 import WorkFlowInfo from "./WorkFlowInfo.vue";
 import NodeInfo from "./NodeInfo/index.vue";
 import EdgeInfo from "./EdgeInfo.vue";
+import WorkflowNote from "./WorkflowNote.vue";
 
 import EditExpression from "./EditExpression.vue";
 import ErrorMsg from "./ErrorMsg.vue";
@@ -65,6 +69,7 @@ export default {
     EdgeInfo,
     EditExpression,
     ErrorMsg,
+    WorkflowNote,
   },
   provide() {
     return {
@@ -202,6 +207,9 @@ export default {
     },
     handleWorkFlow() {
       this.$store.commit("flow/setFlowDlgState", true);
+    },
+    handleWorkFlowNote() {
+      this.$store.commit("flow/setFlowNoteDlgState", true);
     },
   },
 };

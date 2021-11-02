@@ -34,19 +34,16 @@ export default createStore({
     };
   },
   mutations: {
+    setWorkFlowNote(state, data) {
+      state.NoteList = data;
+    },
     setBasic(state, data) {
       state.DocTypeAndWindowList = data.DocTypeAndWindowList;
       state.ClientFunctionList = data.ClientFuntionList;
       state.ServerFunctionList = data.ServerFunctionList;
       state.UserInfoList = data.UserInfoList;
       state.NodeUserDesList = data.NodeUserDesList;
-
-      for (const key in data.DicWorkFlowNoteList) {
-        state.NoteList.push({
-          label: key,
-          value: data.DicWorkFlowNoteList[key],
-        });
-      }
+      state.NoteList = data.WorkFlowNoteList;
 
       for (const key in data.DicCompanyList) {
         state.CompanyList.push({
