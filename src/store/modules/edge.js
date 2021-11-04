@@ -37,5 +37,4 @@ export default {
       commit("updateCond", data, { root: true });
     },
   },
-}
-;
+};

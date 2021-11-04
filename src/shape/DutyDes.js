@@ -1,7 +1,7 @@
 import { Shape } from "@antv/x6";
-export default class DutyOrg extends Shape.Rect {
+export default class DutyDes extends Shape.Rect {
 }
-DutyOrg.config({
+DutyDes.config({
   width: 280,
   height: 70,
   attrs: {

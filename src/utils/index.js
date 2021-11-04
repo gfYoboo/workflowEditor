@@ -12,13 +12,13 @@ export function GetProtID(point) {
   }
 }
 export function EncryptParam(argObj) {
-  if (argObj == null || argObj === undefined) return argObj;
+  if (argObj === null || argObj === undefined) return null;
   let o = "";
   let isObj = false;
-  if (typeof (argObj) === "string") { o = argObj.toString(); } else {
+  if (typeof (argObj) === "string") { o = argObj; } else {
     o = JSON.stringify(argObj);
     isObj = true;
-  }
+  };
   const secObj = getLegalKeyIV();
   const e1 = cryptoJs.AES.encrypt(o, secObj.iKey,
     {

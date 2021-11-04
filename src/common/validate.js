@@ -206,7 +206,7 @@ function ExistloopOfWorkFlow() {
   const workFlowNodeList = JSON.parse(JSON.stringify(store.state.NodeList));
   const workFlowConditionList = JSON.parse(JSON.stringify(store.state.ConditionList));
 
-  const topologyNodeList = [];
+  // const topologyNodeList = [];
   let NeedDeletedConTemp = [];
 
   let NeedContinue = true;// 判断是否继续循环检测--如果检测不出还有入度为0的节点，就停止循环检测
@@ -218,7 +218,7 @@ function ExistloopOfWorkFlow() {
       if (nodeHt[de] === 0) {
         IncludeNodeOfZeroInDegree = true;// 标记
 
-        topologyNodeList.push(de);
+        // topologyNodeList.push(de);
 
         const deIndex = workFlowNodeList.findIndex(item => Number(item.DBID) === Number(de));
         workFlowNodeList.splice(deIndex, 1);

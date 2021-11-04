@@ -116,5 +116,4 @@ export default (graph) => {
       },
     },
   });
-}
-;
+};

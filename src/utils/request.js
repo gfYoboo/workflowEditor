@@ -95,23 +95,17 @@ service.interceptors.response.use(
         ElMessageBox.alert("你已被登出，请重新登录", "提示", {})
           .then(() => { })
           .catch(() => { });
-      } else {
-        if (res.$msg) {
-          ElMessage.error(res.$msg);
-        } else {
-          if (error.message.indexOf("timeout") !== -1) {
-            ElMessage.error("网络超时");
-          } else if (error.message === "Network Error") {
-            ElMessage.error("网络连接错误");
-          } else {
-            if (error.response.data) ElMessage.error(error.response.statusText);
-            else ElMessage.error("接口路径找不到");
-          }
-        }
-      }
-      return Promise.reject(error);
+      } else if (res.$msg) {
+        ElMessage.error(res.$msg);
+      } else if (error.message.indexOf("timeout") !== -1) {
+        ElMessage.error("网络超时");
+      } else if (error.message === "Network Error") {
+        ElMessage.error("网络连接错误");
+      } else if (error.response.data) {
+        ElMessage.error(error.response.statusText);
+      } else ElMessage.error("接口路径找不到");
     }
+    return Promise.reject(error);
   });
 
-export default service
-;
+export default service;

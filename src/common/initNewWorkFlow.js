@@ -26,5 +26,4 @@ export default (graph) => {
     y: 235,
     shape: "end",
   });
-}
-;
+};

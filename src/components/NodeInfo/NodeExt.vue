@@ -126,9 +126,8 @@ export default {
         for (let i = 0; i < this.ServerFunctionList[el].length; i++) {
           item.children.push({ label: this.ServerFunctionList[el][i], isFunc: true });
         }
-
         this.treeList.push(item);
-      };
+      }
       if (this.node[fieldName]) {
         this.list = this.node[fieldName].split(";");
       } else {
