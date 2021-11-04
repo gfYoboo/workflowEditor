@@ -34,7 +34,7 @@ export default {
   computed: mapState({
     node: (state) => state.node.CurrentNode,
     WorkFlowInfo: (state) => state.WorkFlowInfo,
-    DocTypeInfo: (state) => state.DocTypeInfo,
+    CurrentSheetWindowName: (state) => state.CurrentSheetWindowName,
   }),
   mounted() {
     this.initCheckFactor();
@@ -42,7 +42,7 @@ export default {
   methods: {
     async initCheckFactor() {
       this.CheckFactorList = [];
-      const list = await GetCheckFactorList(this.DocTypeInfo.sheetname);
+      const list = await GetCheckFactorList(this.CurrentSheetWindowName);
       list.forEach(dispunit => {
         const item = {
           DispUnit: dispunit,

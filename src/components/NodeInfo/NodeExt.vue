@@ -64,16 +64,25 @@
       </div>
       <div class="qyui-cell" style="width:80px">
         <div class="qyui-cell row">
-          <div>
-            <el-button @click="handleAdd">增加</el-button>
-            <el-button @click="handleDelete">删除</el-button>
+          <div class="qyui-cell row">
+            <div class="qyui-cell" style="height:36px;align-self:center">
+              <span>
+                <el-button @click="handleAdd">增加</el-button>
+              </span>
+            </div>
+            <div class="qyui-cell" style="height:36px;align-self:center">
+              <span>
+                <el-button @click="handleDelete">删除</el-button>
+              </span>
+
+            </div>
           </div>
         </div>
       </div>
       <div class="qyui-cell row bdl">
         <ul class="qyui-ul">
           <template v-for="item in list" :key="item">
-            <li :class="{ active: item === currentItem }" @click="handleClick(item)">{{ item }}</li>
+            <li :class="{ current: item === currentItem }" @click="handleClick(item)">{{ item }}</li>
           </template>
         </ul>
       </div>

@@ -37,7 +37,7 @@
       <el-form-item label="审批条件">
         <el-input
           v-model="currentNodeUserEdit.ConPIM"
-          placeholder="请输入内容"
+          placeholder="默认为空 即1=1"
           class="input-with-select"
           :readonly="true"
         >

@@ -21,10 +21,10 @@
       <el-form-item label="单据类型">
         <el-select v-model="flow.DocTypeName" filterable placeholder="请选择单据类型">
           <el-option
-            v-for="item in DocTypeList"
-            :key="item"
-            :label="item"
-            :value="item"
+            v-for="(w,docType) in DocTypeAndWindow"
+            :key="docType"
+            :label="docType"
+            :value="docType"
           />
         </el-select>
       </el-form-item>
@@ -32,9 +32,9 @@
         <el-select v-model="flow.Organization_xID" placeholder="请选择单位名称">
           <el-option
             v-for="item in CompanyList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           />
         </el-select>
       </el-form-item>
@@ -97,7 +97,7 @@ export default {
     ...mapState({
       showFlowDlg: (state) => state.flow.showFlowDlg,
       WorkFlowInfo: (state) => state.WorkFlowInfo,
-      DocTypeAndWindowList: (state) => state.DocTypeAndWindowList,
+      DocTypeAndWindow: (state) => state.DocTypeAndWindow,
       CompanyList: (state) => state.CompanyList,
     }),
     showDlg: {
@@ -112,9 +112,6 @@ export default {
   methods: {
     openDlg() {
       this.flow = JSON.parse(JSON.stringify(this.WorkFlowInfo));
-      this.DocTypeAndWindowList.forEach((element) => {
-        this.DocTypeList.push(element.doctype);
-      });
     },
     handleConfirm() {
       this.$store.commit("updateFlow", this.flow);

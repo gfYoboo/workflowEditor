@@ -78,7 +78,7 @@
                 <li
                   v-for="item in FuncList"
                   :key="item.Name"
-                  :class="{ active: currentItem.Name === item.Name }"
+                  :class="{ current: currentItem.Name === item.Name }"
                   @click="handleFuncClick(item)"
                   @dblclick="handleFuncDbClick(item)"
                 >
@@ -170,7 +170,7 @@ export default {
       ExpressionStore: (state) => state.expression.Expression,
       PsmExpressionStore: (state) => state.expression.PsmExpression,
       ParameterXmlStore: (state) => state.expression.ParameterXml,
-      DocTypeInfo: (state) => state.DocTypeInfo,
+      CurrentSheetWindowName: (state) => state.CurrentSheetWindowName,
     }),
     showDlg: {
       get() {
@@ -192,7 +192,7 @@ export default {
     },
     dlgOpen() {
       this.$store.commit("setSheetWindowName");
-      this.SheetWindowName = this.DocTypeInfo.sheetname;
+      this.SheetWindowName = this.CurrentSheetWindowName;
       this.Expression = this.ExpressionStore;
       this.PsmExpression = this.PsmExpressionStore;
       this.ParameterXml = this.ParameterXmlStore;

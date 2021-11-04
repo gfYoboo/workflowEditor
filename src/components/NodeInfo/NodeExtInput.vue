@@ -2,7 +2,7 @@
   <el-col :span="12">
     <el-form-item :label="label">
       <el-input
-        v-model="node[field]"
+        :value="showValue"
         type="textarea"
         :rows="3"
         readonly
@@ -34,9 +34,14 @@ export default {
 
     };
   },
-  computed: mapState({
-    node: (state) => state.node.CurrentNode,
-  }),
+  computed: {
+    ...mapState({
+      node: (state) => state.node.CurrentNode,
+    }),
+    showValue() {
+      return this.node[this.field].replace(/;/gm, "\n");
+    },
+  },
   methods: {
     showTransferDialog() {
       this.$emit("select");

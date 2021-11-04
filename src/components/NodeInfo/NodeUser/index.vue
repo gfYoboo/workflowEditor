@@ -7,10 +7,10 @@
         </template>
       </el-select>
     </el-form-item>
-    <el-form-item label="选择审批用户">
-      <el-select v-model="node.AppointUserID" clearable placeholder>
-        <template v-for="item in RelationList" :key="item.value">
-          <el-option :label="item.label" :value="item.value" />
+    <el-form-item label="岗位角色">
+      <el-select v-model="node.AppointUserID" clearable placeholder @change="handleAppointUserChange">
+        <template v-for="item in RelationList" :key="item.id">
+          <el-option :label="item.name" :value="item.id" />
         </template>
       </el-select>
     </el-form-item>
@@ -88,6 +88,15 @@ export default {
     // 打开编辑“审批人”的窗口
     showNodeUserDialog(obj) {
       this.$refs.nodeUserEdit.show(obj);
+    },
+    handleAppointUserChange(val) {
+      // TODO 平台3.9版本删除此特殊定义
+      const index = this.RelationList.findIndex(a => a.id === val);
+      if (this.RelationList[index].name === "部门负责人") {
+        this.node.OnlyDepartmentManager = "Y";
+      } else {
+        this.node.OnlyDepartmentManager = "N";
+      }
     },
     // 删除当前审批人
     delNodeUser(obj) {

@@ -6,7 +6,7 @@ li {
 }
 
 a,
-button {
+button,span,li {
   user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -219,7 +219,6 @@ button {
 
 .qyui-ul li {
   height: 36px;
-  padding: 2px;
   line-height: 36px;
   text-align: left;
   overflow: hidden;
@@ -232,6 +231,10 @@ button {
 
 .qyui-ul li.current {
   background-color: #fff3a1;
+}
+
+.qyui-hide {
+  display: none;
 }
 
 .el-dialog__header {

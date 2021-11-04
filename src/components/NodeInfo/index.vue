@@ -81,6 +81,7 @@ export default {
   },
   methods: {
     handleConfirm() {
+      // 重新组织审批要素 默认值的不需要保存到数据库
       const CheckFactorList = this.$refs.CheckFactor?.CheckFactorList || [];
       const newList = CheckFactorList.filter(a => {
         return a.CanEdit === "Y" || a.NotNullable === "Y" || a.IsHidden === "Y";
@@ -103,7 +104,6 @@ export default {
           item.EditAble = "Y";
         }
       });
-
       const newList2 = CheckWindowFactorList.filter(a => {
         return a.AddAble === "Y" || a.EditAble === "Y" || a.DeleteAble === "Y" || a.MustHaveData === "Y";
       });

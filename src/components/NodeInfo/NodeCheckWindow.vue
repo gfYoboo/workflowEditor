@@ -15,6 +15,11 @@
         <el-checkbox v-model="scope.row.AddAble" true-label="Y" false-label="N" />
       </template>
     </el-table-column>
+    <!--是否可编辑由审批要素控制 <el-table-column label="是否可编辑" width="90" align="center">
+      <template #default="scope">
+        <el-checkbox v-model="scope.row.EditAble" disabled true-label="Y" false-label="N" />
+      </template>
+    </el-table-column> -->
     <el-table-column label="是否可删除" width="90" align="center">
       <template #default="scope">
         <el-checkbox v-model="scope.row.DeleteAble" true-label="Y" false-label="N" />
@@ -41,19 +46,21 @@ export default {
   computed: mapState({
     node: (state) => state.node.CurrentNode,
     WorkFlowInfo: (state) => state.WorkFlowInfo,
-    DocTypeInfo: (state) => state.DocTypeInfo,
-
-    tableRowClassName() {
-      return "";
-    },
+    CurrentSheetWindowName: (state) => state.CurrentSheetWindowName,
   }),
   mounted() {
     this.initCheckWindowFactor();
   },
   methods: {
-    async initCheckWindowFactor() {
+    tableRowClassName({ row, rowIndex }) {
+      // 表单窗口的主表不受操作权限控制，由主表的审批要素决定是否可编辑
+      if (rowIndex === 0) {
+        return "qyui-hide";
+      } else { return ""; }
+    },
+    async initCheckWindowFactor(reset) {
       this.CheckWindowFactorList = [];
-      const list = await GetCheckOperationPurviewList(this.DocTypeInfo.sheetname);
+      const list = await GetCheckOperationPurviewList(this.CurrentSheetWindowName);
       list.forEach(windowName => {
         const item = {
           WindowName: windowName,
@@ -62,19 +69,21 @@ export default {
           EditAble: "N",
           MustHaveData: "N",
         };
+        if (!reset) {
         // 判断是否有定义
-        const item2 = this.node.CheckWindowFactorList.find(item => item.WindowName === windowName);
-        if (item2) {
-          item.AddAble = item2.AddAble;
-          item.EditAble = item2.EditAble;
-          item.DeleteAble = item2.DeleteAble;
-          item.MustHaveData = item2.MustHaveData;
+          const item2 = this.node.CheckWindowFactorList.find(item => item.WindowName === windowName);
+          if (item2) {
+            item.AddAble = item2.AddAble;
+            item.EditAble = item2.EditAble;
+            item.DeleteAble = item2.DeleteAble;
+            item.MustHaveData = item2.MustHaveData;
+          }
         }
         this.CheckWindowFactorList.push(item);
       });
     },
     handleReset() {
-      this.initCheckWindowFactor();
+      this.initCheckWindowFactor(true);
     },
   },
 

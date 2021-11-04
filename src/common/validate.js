@@ -219,7 +219,8 @@ function ExistloopOfWorkFlow() {
         IncludeNodeOfZeroInDegree = true;// 标记
 
         topologyNodeList.push(de);
-        const deIndex = workFlowNodeList.findIndex(item => item.DBID === de);
+
+        const deIndex = workFlowNodeList.findIndex(item => Number(item.DBID) === Number(de));
         workFlowNodeList.splice(deIndex, 1);
 
         NeedDeletedConTemp = [];//

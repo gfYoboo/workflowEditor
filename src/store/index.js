@@ -14,8 +14,7 @@ export default createStore({
       showExpDlg: false,
       ExpType: "",
       NoteList: [],
-      DocTypeAndWindowList: [],
-      UserInfoList: [],
+      DocTypeAndWindow: {},
       CompanyList: [],
       ClientFunctionList: [],
       ServerFunctionList: [],
@@ -26,8 +25,7 @@ export default createStore({
       WorkFlowNoteList: [],
       NodeList: [],
       ConditionList: [],
-
-      DocTypeInfo: {},
+      CurrentSheetWindowName: "",
       CurrentNextId: -10000,
       CurrentCell: {},
 
@@ -38,26 +36,13 @@ export default createStore({
       state.NoteList = data;
     },
     setBasic(state, data) {
-      state.DocTypeAndWindowList = data.DocTypeAndWindowList;
+      state.DocTypeAndWindow = data.DocTypeAndWindow;
       state.ClientFunctionList = data.ClientFuntionList;
       state.ServerFunctionList = data.ServerFunctionList;
-      state.UserInfoList = data.UserInfoList;
       state.NodeUserDesList = data.NodeUserDesList;
       state.NoteList = data.WorkFlowNoteList;
-
-      for (const key in data.DicCompanyList) {
-        state.CompanyList.push({
-          label: key,
-          value: data.DicCompanyList[key],
-        });
-      }
-
-      for (const key in data.DicWorkFlowRelationList) {
-        state.RelationList.push({
-          label: key,
-          value: data.DicWorkFlowRelationList[key],
-        });
-      }
+      state.CompanyList = data.CompanyList;
+      state.RelationList = data.WorkFlowRelationList;
     },
     setWorkFlowInfo(state, data) {
       state.WorkFlowInfo = data.WorkFlowInfo;
@@ -67,11 +52,9 @@ export default createStore({
     },
     setSheetWindowName(state) {
       if (state.WorkFlowInfo.DocTypeName) {
-        state.DocTypeAndWindowList.forEach(item => {
-          if (item.doctype === state.WorkFlowInfo.DocTypeName) {
-            state.DocTypeInfo = item;
-          }
-        });
+        state.CurrentSheetWindowName = state.DocTypeAndWindow[state.WorkFlowInfo.DocTypeName];
+      } else {
+        console.log("按理论是不会进入这里的", state.WorkFlowInfo.DocTypeName);
       }
     },
     setCurrentNextIdInc(state) {

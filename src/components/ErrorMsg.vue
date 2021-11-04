@@ -8,10 +8,10 @@
     destroy-on-close
   >
     <ul class="qyui-ul">
-      <template v-for="(item) in ErrorCollection" :key="item">
+      <template v-for="item in ErrorCollection" :key="item">
         <li class="noheight">错误:{{ item }}</li>
       </template>
-      <template v-for="(item) in WarningCollection" :key="item">
+      <template v-for="item in WarningCollection" :key="item">
         <li class="noheight">警告:{{ item }}</li>
       </template>
     </ul>
@@ -23,9 +23,7 @@ import { mapState } from "vuex";
 export default {
   emits: ["dosave"],
   data() {
-    return {
-
-    };
+    return {};
   },
   computed: {
     ...mapState({
@@ -53,12 +51,18 @@ export default {
           showCancelButton: true,
           confirmButtonText: "确认",
           cancelButtonText: "取消",
-        }).then(action => {
-          if (action === "confirm") {
-            done();
-            this.$emit("dosave");
-          }
-        });
+        })
+          .then((action) => {
+            if (action === "confirm") {
+              done();
+              this.$emit("dosave");
+            }
+          }).catch((action) => {
+            // 选择取消关闭
+            if (action === "cancel") {
+              this.showDlg = false;
+            }
+          });
       } else {
         this.$emit("dosave");
       }
