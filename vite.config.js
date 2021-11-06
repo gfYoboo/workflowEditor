@@ -14,7 +14,7 @@ export default ({ command, mode }) => {
         supportTs: false,
         mockPath: "mock",
         localEnabled: enableMock,
-        prodEnabled: false,
+        prodEnabled: true,
         injectCode: `
         import { setupProdMockServer } from '../mock/index';
   

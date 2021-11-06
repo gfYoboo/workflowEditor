@@ -5,7 +5,6 @@
         <el-button type="primary" @click="handleSave">保存</el-button>
         <el-button type="success" @click="handleWorkFlow">流程属性</el-button>
         <el-button type="success" @click="handleWorkFlowNote">职能部门维护</el-button>
-
       </div>
     </div>
     <div class="qyui-cell col">
@@ -81,6 +80,7 @@ export default {
       graph: null,
       DicWorkFlowNoteList: [],
       loading: true,
+      demo: import.meta.env.MODE === "demo",
     };
   },
   computed: {
@@ -127,20 +127,27 @@ export default {
   methods: {
     async init() {
       this.$store.dispatch("GetBasic");
-      let WorkFlowId = this.getQueryString("id");
-      if (WorkFlowId === "") {
-        WorkFlowId = "0";
-      }
-      if (WorkFlowId === "0") {
-        this.$store.dispatch("createNewWorkFlowInfo").then(() => {
-          initNewWorkFlow(this.graph);
-          this.loading = false;
-        });
-      } else {
-        this.$store.dispatch("GetWorkFlowInfo", WorkFlowId).then(() => {
+      if (this.demo) {
+        this.$store.dispatch("GetWorkFlowInfo", 1).then(() => {
           initWorkFlow(this.graph);
           this.loading = false;
         });
+      } else {
+        let WorkFlowId = this.getQueryString("id");
+        if (WorkFlowId === "") {
+          WorkFlowId = "0";
+        }
+        if (WorkFlowId === "0") {
+          this.$store.dispatch("createNewWorkFlowInfo").then(() => {
+            initNewWorkFlow(this.graph);
+            this.loading = false;
+          });
+        } else {
+          this.$store.dispatch("GetWorkFlowInfo", WorkFlowId).then(() => {
+            initWorkFlow(this.graph);
+            this.loading = false;
+          });
+        }
       }
     },
     getQueryString(key) {

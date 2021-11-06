@@ -471,7 +471,7 @@ export default {
           return "时间";
         }
         default: {
-          return "字符串";
+          return "";
         }
       }
     },

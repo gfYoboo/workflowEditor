@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import { GetBasic, GetWorkFlowInfo } from "@/api/workflow";
+import { ElMessage } from "element-plus";
 
 import flow from "./modules/flow";
 import node from "./modules/node";
@@ -98,6 +99,9 @@ export default createStore({
   actions: {
     async GetBasic({ commit }) {
       const res = await GetBasic();
+      if (res.ErrorInfo) {
+        ElMessage.error(res.ErrorInfo);
+      }
       commit("setBasic", res);
     },
     async GetWorkFlowInfo({ commit }, workFlowId) {

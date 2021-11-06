@@ -18,7 +18,7 @@ export function EncryptParam(argObj) {
   if (typeof (argObj) === "string") { o = argObj; } else {
     o = JSON.stringify(argObj);
     isObj = true;
-  };
+  }
   const secObj = getLegalKeyIV();
   const e1 = cryptoJs.AES.encrypt(o, secObj.iKey,
     {

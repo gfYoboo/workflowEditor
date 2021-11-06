@@ -5,6 +5,7 @@
     "dev": "vite",
     "demo": "vite --mode demo",
     "build": "vite build",
+    "build:demo": "vite build --mode demo",
     "serve": "vite preview",
     "lint": "eslint --ext .js,.vue src",
     "lint-fix": "eslint --fix --ext .js,.vue src"
