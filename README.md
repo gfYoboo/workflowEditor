@@ -2,7 +2,7 @@
 
 #### 介绍
 使用 vue3 、vite 、 AntV X6 完成的流程设计器。设计器主要的用途为ERP类项目的流程审批。因为平台旧版本使用的SilverLight流程设计器，然后按照项目需求和原有的样式制作的一模一样的设计器。支持 职能带、节点属性、边条件表达式等。
-[演示站点](http://flow.qyuit.com)
+
 #### 技术点
 1、使用vite + vue3 + vuex + axios + element plus + eslint + AntV X6 + mockjs
 2、手工加载JSON数据，手工创建画布节点，可以自定义业务数据
@@ -48,6 +48,8 @@ npm run demo
 
 #### 参与贡献
 如果觉得项目对您有帮忙，请点星支持一下，欢迎留言交流讨论。
+
+[演示站点](http://flow.qyuit.com)
     
 
 
