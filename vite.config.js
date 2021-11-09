@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { viteMockServe } from "vite-plugin-mock";
 
-import path from "path";
+import { resolve } from "path";
 import config from "./config";
 // https://vitejs.dev/config/
 export default ({ command, mode }) => {
@@ -14,7 +14,7 @@ export default ({ command, mode }) => {
         supportTs: false,
         mockPath: "mock",
         localEnabled: enableMock,
-        prodEnabled: true,
+        prodEnabled: enableMock,
         injectCode: `
         import { setupProdMockServer } from '../mock/index';
   
@@ -25,8 +25,15 @@ export default ({ command, mode }) => {
     base: config[mode].basePath,
     resolve: {
       alias: {
-        "~": path.resolve(__dirname, "./"),
-        "@": path.resolve(__dirname, "src"),
+        "~": resolve(__dirname, "./"),
+        "@": resolve(__dirname, "src"),
+      },
+    },
+    build: {
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, "index.html"),
+        },
       },
     },
     server: {

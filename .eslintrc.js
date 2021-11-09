@@ -16,7 +16,7 @@ module.exports = {
     "vue",
   ],
   rules: {
-    "comma-dangle": ["error", "always-multiline"],
+    "comma-dangle": [2, "always-multiline"],
     "comma-spacing": [2, { before: false, after: true }],
     "comma-style": [2, "last"],
     quotes: [2, "double", { avoidEscape: true, allowTemplateLiterals: true }],

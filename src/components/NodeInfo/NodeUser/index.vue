@@ -2,13 +2,18 @@
   <el-form label-width="100px">
     <el-form-item label="审批用户描述">
       <el-select v-model="node.TitleDescription" clearable placeholder>
-        <template v-for="(item,index) in NodeUserDesList" :key="index">
+        <template v-for="(item, index) in NodeUserDesList" :key="index">
           <el-option :value="item" />
         </template>
       </el-select>
     </el-form-item>
     <el-form-item label="岗位角色">
-      <el-select v-model="node.AppointUserID" clearable placeholder @change="handleAppointUserChange">
+      <el-select
+        v-model="node.AppointUserID"
+        clearable
+        placeholder
+        @change="handleAppointUserChange"
+      >
         <template v-for="item in RelationList" :key="item.id">
           <el-option :label="item.name" :value="item.id" />
         </template>
@@ -35,8 +40,18 @@
   <el-table :data="node.NodeUserList" height="200" border style="width: 100%">
     <el-table-column fixed prop="UserCode" label="用户编码" width="80" />
     <el-table-column fixed prop="UserName" label="用户名称" width="70" />
-    <el-table-column prop="OrgName" label="科室名称" width="90" :show-overflow-tooltip="true" />
-    <el-table-column prop="ComName" label="单位名称" width="90" :show-overflow-tooltip="true" />
+    <el-table-column
+      prop="OrgName"
+      label="科室名称"
+      width="90"
+      :show-overflow-tooltip="true"
+    />
+    <el-table-column
+      prop="ComName"
+      label="单位名称"
+      width="90"
+      :show-overflow-tooltip="true"
+    />
     <el-table-column label="是否本单位审批" width="120">
       <template #default="scope">
         <span v-if="scope.row.DoesOwnCompany === 'Y'">是</span>
@@ -45,7 +60,12 @@
     </el-table-column>
 
     <!--              fixed="right"-->
-    <el-table-column prop="ConPIM" label="审批条件" width="70" :show-overflow-tooltip="true" />
+    <el-table-column
+      prop="ConPIM"
+      label="审批条件"
+      width="70"
+      :show-overflow-tooltip="true"
+    />
     <el-table-column label="操作">
       <template #default="scope">
         <el-button
@@ -75,9 +95,7 @@ import NodeUserEdit from "./NodeUserEdit.vue";
 export default {
   components: { NodeUserEdit },
   data() {
-    return {
-
-    };
+    return {};
   },
   computed: mapState({
     node: (state) => state.node.CurrentNode,
@@ -91,7 +109,7 @@ export default {
     },
     handleAppointUserChange(val) {
       // TODO 平台3.9版本删除此特殊定义
-      const index = this.RelationList.findIndex(a => a.id === val);
+      const index = this.RelationList.findIndex((a) => a.id === val);
       if (this.RelationList[index].name === "部门负责人") {
         this.node.OnlyDepartmentManager = "Y";
       } else {
@@ -108,50 +126,55 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         },
-      )
-        .then(() => {
-          this.node.NodeUserList.splice(this.node.NodeUserList.findIndex((u) => u.UserCode === obj.UserCode), 1);
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
-        })
-        .catch(() => {
-          // console.log('已取消删除');
-          // this.$message({
-          //   type: 'info',
-          //   message: '已取消删除'
-          // });
+      ).then(() => {
+        const index = this.node.NodeUserList.findIndex(
+          (u) => u.UserCode === obj.UserCode,
+        );
+        this.node.NodeUserList.splice(index, 1);
+        this.$message({
+          type: "success",
+          message: "删除成功!",
         });
+      }).catch(() => {
+        // console.log('已取消删除');
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消删除'
+        // });
+      });
     },
     saveNodeUser(data) {
       // 判断是编辑还是新增
-      if (data.ID < 0) {
-        // 新增
-        if (this.node.NodeUserList.findIndex(d => d.UserCode === data.UserCode) > -1) {
+      // 根据ID去找 记录
+      const index = this.node.NodeUserList.findIndex(
+        (d) => d.ID === data.ID,
+      );
+      if (index > -1) {
+        this.node.NodeUserList[index] = data;
+      } else {
+        // 再判断是否已经存在
+        const index2 = this.node.NodeUserList.findIndex(
+          (d) => d.UserCode === data.UserCode,
+        );
+        if (index2 > -1) {
           this.$message.error(`已存在【${data.UserName}】，不可重复添加！`);
         } else {
           this.node.NodeUserList.push(data);
         }
-      } else {
-        const index = this.node.NodeUserList.findIndex(d => d.UserCode === data.UserCode);
-        this.node.NodeUserList[index] = data;
       }
     },
     showExpDialog() {
-      this.$store.dispatch("expression/editExp",
-        {
-          Expression: this.node.AppointCheckerExpression,
-          PsmExpression: "",
-          ParameterXml: "",
-          ResultType: "String",
-          callback: this.callbackExp,
-        });
+      this.$store.dispatch("expression/editExp", {
+        Expression: this.node.AppointCheckerExpression,
+        PsmExpression: "",
+        ParameterXml: "",
+        ResultType: "String",
+        callback: this.callbackExp,
+      });
     },
     callbackExp(data) {
       this.node.AppointCheckerExpression = data.Expression;
     },
-
   },
 };
 </script>
