@@ -19,6 +19,7 @@ module.exports = {
     "comma-dangle": [2, "always-multiline"],
     "comma-spacing": [2, { before: false, after: true }],
     "comma-style": [2, "last"],
+    "vue/comment-directive": "off",
     quotes: [2, "double", { avoidEscape: true, allowTemplateLiterals: true }],
     semi: [2, "always"],
     "semi-spacing": [2, { before: false, after: true }],
@@ -39,7 +40,7 @@ module.exports = {
     "vue/html-self-closing": ["error", {
       html: {
         void: "never",
-        normal: "never",
+        normal: "any",
         component: "any",
       },
       svg: "always",

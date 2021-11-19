@@ -30,7 +30,7 @@
     <el-input
       v-model="UserListSearchKey"
       size="mini"
-      placeholder="输入“用户名称”关键字搜索"
+      placeholder="输入“用户编码、用户名称”关键字搜索"
       clearable
       @input="SearchChange"
     />

@@ -42,14 +42,16 @@
                 label="数据集"
                 style="height: 100%; overflow: auto"
               >
-                <el-tree
-                  :data="dataTreeData"
-                  node-key="title"
-                  :expand-on-click-node="false"
-                  default-expand-all
-                  highlight-current
-                  @node-click="handleNodeClick"
-                />
+                <el-scrollbar>
+                  <el-tree
+                    :data="dataTreeData"
+                    node-key="title"
+                    :expand-on-click-node="false"
+                    default-expand-all
+                    highlight-current
+                    @node-click="handleNodeClick"
+                  />
+                </el-scrollbar>
               </el-tab-pane>
               <el-tab-pane name="func" label="函数">
                 <el-tree
@@ -131,6 +133,7 @@
 import { mapState } from "vuex";
 import {
   GetExpressionOperatorList,
+  GetExpressionFunctionList,
   ValidateExpression,
   GetSheetWindowMainCardModel,
 } from "@/api/expression";
@@ -204,7 +207,7 @@ export default {
         this.OperatorList = res.Data;
       }
       if (this.funcTreeData.length === 0) {
-        const resFunc = await GetExpressionOperatorList();
+        const resFunc = await GetExpressionFunctionList();
         if (resFunc.Success && resFunc.Data && resFunc.Data.length > 0) {
           const funcList = [];
           resFunc.Data.forEach((item) => {

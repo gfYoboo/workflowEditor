@@ -7,6 +7,13 @@ export function GetExpressionOperatorList() {
       data: { runType: "Server" },
     });
 }
+export function GetExpressionFunctionList() {
+  return request(
+    {
+      url: "/api/Common/GetExpressionFunctionList",
+      data: { runType: "Server" },
+    });
+}
 
 export function ValidateExpression(param) {
   return request(
