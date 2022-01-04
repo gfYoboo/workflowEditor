@@ -11,18 +11,19 @@
     "lint-fix": "eslint --fix --ext .js,.vue src"
   },
   "dependencies": {
-    "@antv/x6": "^1.28.1",
+    "@antv/x6": "^1.29.1",
+    "@element-plus/icons": "0.0.11",
     "axios": "^0.23.0",
     "cross-env": "^7.0.3",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.10.7",
-    "element-plus": "^1.1.0-beta.24",
-    "vue": "^3.2.20",
+    "element-plus": "^1.2.0-beta.6",
+    "vue": "^3.2.26",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.9.3",
-    "@vue/compiler-sfc": "^3.2.20",
+    "@vitejs/plugin-vue": "^1.10.2",
+    "@vue/compiler-sfc": "^3.2.26",
     "@vue/eslint-config-standard": "^6.1.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
@@ -32,7 +33,7 @@
     "eslint-plugin-vue": "^7.18.0",
     "mockjs": "^1.1.0",
     "sass": "^1.43.2",
-    "vite": "^2.6.10",
+    "vite": "^2.7.10",
     "vite-plugin-mock": "^2.9.6"
   }
 }

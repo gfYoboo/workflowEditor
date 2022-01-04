@@ -17,7 +17,6 @@ export default ({ command, mode }) => {
         prodEnabled: enableMock,
         injectCode: `
         import { setupProdMockServer } from '../mock/index';
-  
         setupProdMockServer();
         `,
       }),

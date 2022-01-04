@@ -54,6 +54,11 @@ export default createStore({
     setSheetWindowName(state) {
       if (state.WorkFlowInfo.DocTypeName) {
         state.CurrentSheetWindowName = state.DocTypeAndWindow[state.WorkFlowInfo.DocTypeName];
+        if (!state.CurrentSheetWindowName) {
+          alert("CurrentSheetWindowName 根据单据类型 " + state.WorkFlowInfo.DocTypeName + " 未找到对应的表单");
+          console.log("state.DocTypeAndWindow", state.DocTypeAndWindow);
+          console.log("state.WorkFlowInfo.DocTypeName", state.WorkFlowInfo.DocTypeName);
+        }
       } else {
         console.log("按理论是不会进入这里的", state.WorkFlowInfo.DocTypeName);
       }

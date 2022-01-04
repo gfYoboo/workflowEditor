@@ -110,14 +110,14 @@ export default {
     handleSave() {
       SaveWorkFlowNote(this.formData).then(res => {
         this.$message({ type: "success", message: "保存成功" });
-        this.$store.commit("setWorkFlowNote", res.$result);
+        this.$store.commit("setWorkFlowNote", res.Result);
       });
     },
     handleDelete() {
       if (this.formData.ID) {
         RemoveWorkFlowNote({ ID: this.formData.ID }).then(res => {
           this.$message({ type: "success", message: "删除成功" });
-          this.$store.commit("setWorkFlowNote", res.$result);
+          this.$store.commit("setWorkFlowNote", res.Result);
           this.formData = {
             ID: "",
             NoteCode: "",

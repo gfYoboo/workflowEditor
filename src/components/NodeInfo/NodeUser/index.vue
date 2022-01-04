@@ -1,7 +1,7 @@
 <template>
-  <el-form label-width="100px">
+  <el-form label-width="150px">
     <el-form-item label="审批用户描述">
-      <el-select v-model="node.TitleDescription" clearable placeholder>
+      <el-select v-model="node.TitleDescription" clearable placeholder="报表获取审批签名使用">
         <template v-for="(item, index) in NodeUserDesList" :key="index">
           <el-option :value="item" />
         </template>
@@ -11,28 +11,30 @@
       <el-select
         v-model="node.AppointUserID"
         clearable
-        placeholder
-        @change="handleAppointUserChange"
+        placeholder="角色岗位选择"
       >
         <template v-for="item in RelationList" :key="item.id">
           <el-option :label="item.name" :value="item.id" />
         </template>
       </el-select>
     </el-form-item>
+    <el-form-item label="部门负责人审批">
+      <el-switch v-model="node.OnlyDepartmentManager" inline-prompt active-text="是" inactive-text="否" active-value="Y" inactive-value="N"></el-switch>
+      <el-alert style="display:inline" type="warning" title="预删除功能,尽量选否，然后统一使用岗位角色定义部门负责人" :closable="false"></el-alert>
+    </el-form-item>
     <el-form-item label="审批人表达式">
       <el-input v-model="node.AppointCheckerExpression" readonly>
         <template #append>
-          <el-button icon="el-icon-edit" @click="showExpDialog" />
+          <el-button icon="edit" @click="showExpDialog" />
         </template>
       </el-input>
     </el-form-item>
     <el-form-item label="审批人列表">
       <el-button
         type="success"
-        plain
         size="mini"
         plian
-        icon="el-icon-plus"
+        icon="plus"
         @click="showNodeUserDialog()"
       >新增</el-button>
     </el-form-item>
@@ -70,14 +72,14 @@
       <template #default="scope">
         <el-button
           type="primary"
-          icon="el-icon-edit"
+          icon="edit"
           circle
           size="mini"
           @click="showNodeUserDialog(scope.row)"
         />
         <el-button
           type="danger"
-          icon="el-icon-delete"
+          icon="delete"
           circle
           size="mini"
           @click="delNodeUser(scope.row)"
@@ -107,15 +109,15 @@ export default {
     showNodeUserDialog(obj) {
       this.$refs.nodeUserEdit.show(obj);
     },
-    handleAppointUserChange(val) {
-      // TODO 平台3.9版本删除此特殊定义
-      const index = this.RelationList.findIndex((a) => a.id === val);
-      if (this.RelationList[index].name === "部门负责人") {
-        this.node.OnlyDepartmentManager = "Y";
-      } else {
-        this.node.OnlyDepartmentManager = "N";
-      }
-    },
+    // handleAppointUserChange(val) {
+    //   // TODO 平台3.9版本删除此特殊定义
+    //   const index = this.RelationList.findIndex((a) => a.id === val);
+    //   if (this.RelationList[index].name === "部门负责人") {
+    //     this.node.OnlyDepartmentManager = "Y";
+    //   } else {
+    //     this.node.OnlyDepartmentManager = "N";
+    //   }
+    // },
     // 删除当前审批人
     delNodeUser(obj) {
       this.$confirm(

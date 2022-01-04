@@ -9,7 +9,7 @@
         resize="none"
         style="width: 200px;"
       />
-      <el-button icon="el-icon-edit" @click="showTransferDialog" />
+      <el-button icon="edit" @click="showTransferDialog" />
     </el-form-item>
   </el-col>
 </template>

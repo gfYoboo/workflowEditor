@@ -77,7 +77,7 @@ export default [
     url: "/api/workflow/SaveWorkFlow",
     method: "post",
     response: () => {
-      return { Code: "S", $code: "S", Success: true, $msg: "", Message: "", Result: null, $result: null };
+      return { Code: "S", Success: true, Message: "", Result: null };
     },
   },
 ];

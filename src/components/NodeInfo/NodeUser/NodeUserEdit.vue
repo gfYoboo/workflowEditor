@@ -12,7 +12,7 @@
       <el-form-item label="用户编码">
         <el-input v-model="currentNodeUserEdit.UserCode" class="input-with-select" readonly>
           <template #append>
-            <el-button icon="el-icon-search" @click="showUserListDialog" />
+            <el-button icon="search" @click="showUserListDialog" />
           </template>
         </el-input>
       </el-form-item>
@@ -42,7 +42,7 @@
           :readonly="true"
         >
           <template #append>
-            <el-button icon="el-icon-edit" @click="showExpDialog" />
+            <el-button icon="edit" @click="showExpDialog" />
           </template>
         </el-input>
       </el-form-item>

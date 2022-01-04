@@ -32,15 +32,15 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response.data;
-    if (res.$code && res.$code === "T") {
+    if (res.Code && res.Code === "T") {
       clearSession();
       ElMessageBox.alert("你已被登出，请重新登录", "提示", {})
         .then(() => { })
         .catch(() => { });
       return Promise.reject(service.interceptors.response);
     }
-    if (res.$code && res.$code === "E") {
-      ElMessageBox.alert(res.$msg);
+    if (res.Code && res.Code === "E") {
+      ElMessageBox.alert(res.Message);
     } else {
       return res;
     }
@@ -48,25 +48,25 @@ service.interceptors.response.use(
   error => {
     if (error && error.response) {
       // let message = "";
-    //   switch (error.response.status) {
-    //     case 400:
-    //       message = "请求错误";
-    //       break;
-    //     case 401: {
-    //       message = "未授权，请登录";
-    //       break;
-    //     }
-    //     case 403:
-    //       message = "没有权限，拒绝访问";
-    //       break;
-    //     case 404:
-    //       message = `请求地址出错`;
-    //       break;
-    //     case 408:
-    //       message = "请求超时";
-    //       break;
-    //     case 500:
-    //       message = "服务器内部错误";
+      //   switch (error.response.status) {
+      //     case 400:
+      //       message = "请求错误";
+      //       break;
+      //     case 401: {
+      //       message = "未授权，请登录";
+      //       break;
+      //     }
+      //     case 403:
+      //       message = "没有权限，拒绝访问";
+      //       break;
+      //     case 404:
+      //       message = `请求地址出错`;
+      //       break;
+      //     case 408:
+      //       message = "请求超时";
+      //       break;
+      //     case 500:
+      //       message = "服务器内部错误";
 
       //       break;
       //     case 501:
@@ -88,15 +88,15 @@ service.interceptors.response.use(
       //       break;
       //   }
       const res = error.response.data;
-      if (res.$code && res.$code === "T") {
+      if (res.Code && res.Code === "T") {
         clearSession();
         // router.push("/login"); // 去登录页面
         // resetRoute(); // 删除/重置路由
         ElMessageBox.alert("你已被登出，请重新登录", "提示", {})
           .then(() => { })
           .catch(() => { });
-      } else if (res.$msg) {
-        ElMessage.error(res.$msg);
+      } else if (res.Message) {
+        ElMessage.error(res.Message);
       } else if (error.message.indexOf("timeout") !== -1) {
         ElMessage.error("网络超时");
       } else if (error.message === "Network Error") {
