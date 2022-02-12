@@ -8,5 +8,6 @@ indent_size = 2
 end_of_line = crlf
 # 自动剔除行尾空格
 trim_trailing_whitespace = true
+[*.*]
 # 文件结尾插入空行
 insert_final_newline = true

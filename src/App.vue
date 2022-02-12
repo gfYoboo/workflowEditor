@@ -3,7 +3,7 @@
 </template>
 
 <script >
-import FlowEditor from "./components/FlowEditor.vue";
+import FlowEditor from './components/FlowEditor/index.vue';
 export default {
   components: { FlowEditor },
 };
@@ -18,6 +18,7 @@ body {
   bottom: 0;
   padding: 0;
   margin: 0;
+  overflow: hidden;
 }
 #app {
   height: 100%;
