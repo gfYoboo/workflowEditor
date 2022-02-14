@@ -166,7 +166,7 @@ export default {
           if (data.DBID !== '') {
             // 职能带全部删除 重新创建
             const pos = cell.position();
-            WorkFlowNoteList.push({ DispX: pos.x, DispY: pos.y, NoteName_Xid: data.NoteName_Xid });
+            WorkFlowNoteList.push({ DBID: data.DBID, DispX: pos.x, DispY: pos.y, NoteName: data.NoteName, NoteName_Xid: data.NoteName_Xid || '', Des: data.Des });
           }
         }
         if (cell.shape === 'edge') {
@@ -194,7 +194,12 @@ export default {
           cell.shape === 'normal' ||
           cell.shape === 'end'
         ) {
-          WorkFlowNodeList.push(cell.getData());
+          const data = cell.getData();
+          const pos = cell.position();
+
+          data.NodeX = pos.x;
+          data.NodeY = pos.y;
+          WorkFlowNodeList.push(data);
         }
       });
       this.manager.WorkFlowNoteList = WorkFlowNoteList;

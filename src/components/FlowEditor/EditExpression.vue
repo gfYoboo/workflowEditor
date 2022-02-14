@@ -373,41 +373,50 @@ export default {
     },
 
     async ValidateExpression() {
-      const param = {
-        SheetWindowName: this.SheetWindowName,
-        Expression: this.Expression,
-        ResultType: this.manager.expression.ResultType,
-        Parameters: this.Parameters,
-        UseDefaultParameters: true,
-        UseEnName: this.UseEnName,
-        RunOnDB: false,
-        RunOnServer: true,
-        RunAsJS: false,
-      };
-      const res = await ValidateExpression(param);
-      if (res && res.Code === 'S') {
-        const info = res.data;
-        const psm = info.PSM;
-        const parameterXml = info.ParameterXml;
-        const errors = [];
-        if (!info.Succeed) {
-          const errorNodeList = info.Errors;
-          for (let i = 0; i < errorNodeList.length; i++) {
-            errors.push({ text: errorNodeList[i] });
-          }
-        }
-        return {
-          Succeed: info.Succeed,
-          PsmExpression: psm,
-          ParameterXml: parameterXml,
-          Errors: errors,
+      if (this.Expression) {
+        const param = {
+          SheetWindowName: this.SheetWindowName,
+          Expression: this.Expression,
+          ResultType: this.manager.expression.ResultType,
+          Parameters: this.Parameters,
+          UseDefaultParameters: true,
+          UseEnName: this.UseEnName,
+          RunOnDB: false,
+          RunOnServer: true,
+          RunAsJS: false,
         };
+        const res = await ValidateExpression(param);
+        if (res && res.Code === 'S') {
+          const info = res.data;
+          const psm = info.PSM;
+          const parameterXml = info.ParameterXml;
+          const errors = [];
+          if (!info.Succeed) {
+            const errorNodeList = info.Errors;
+            for (let i = 0; i < errorNodeList.length; i++) {
+              errors.push({ text: errorNodeList[i] });
+            }
+          }
+          return {
+            Succeed: info.Succeed,
+            PsmExpression: psm,
+            ParameterXml: parameterXml,
+            Errors: errors,
+          };
+        } else {
+          return {
+            Succeed: false,
+            PsmExpression: '',
+            ParameterXml: '',
+            Errors: [{ text: '调用服务器端程序发生异常' }],
+          };
+        }
       } else {
         return {
-          Succeed: false,
+          Succeed: true,
           PsmExpression: '',
           ParameterXml: '',
-          Errors: [{ text: '调用服务器端程序发生异常' }],
+          Errors: [],
         };
       }
     },
@@ -483,15 +492,16 @@ export default {
             message: '表达式存在错误，请先修改正确',
             type: 'info',
           });
-          return false;
+          return;
         }
-      } else {
-        this.manager.expcallback({
-          Expression: this.Expression,
-          PsmExpression: this.PsmExpression,
-          ParameterXml: this.ParameterXml,
-        });
       }
+      this.manager.expcallback({
+        Expression: this.Expression,
+        PsmExpression: this.PsmExpression,
+        ParameterXml: this.ParameterXml,
+      });
+
+      this.showDlg = false;
     },
 
   },

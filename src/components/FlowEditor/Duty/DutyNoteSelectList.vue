@@ -91,7 +91,7 @@ export default {
           // 根据职能带ID去更新数据
           pcell.updateData({
             NoteName: item?.NoteName || '',
-            NoteName_xID: item?.ID || '',
+            NoteName_Xid: item?.ID || '',
           });
 
           // this.manager.UpdateDuty({

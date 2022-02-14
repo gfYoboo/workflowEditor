@@ -111,8 +111,11 @@ export default {
   components: { NodeExtInput },
   setup() {
     const CurrentNode = inject('CurrentNode');
+    const manager = inject('manager');
+
     return {
       CurrentNode,
+      manager,
     };
   },
   data() {
