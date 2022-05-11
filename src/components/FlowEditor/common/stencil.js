@@ -6,9 +6,9 @@ import Duty from '../shape/Duty';
 export default function (graph) {
   const stencil = new Addon.Stencil({
     target: graph,
-    stencilGraphHeight: 600,
-    stencilGraphWidth: 200,
-    layoutOptions: { columns: 1, columnWidth: 200, dx: 0, dy: 0 },
+    stencilGraphHeight: 400,
+    stencilGraphWidth: 100,
+    layoutOptions: { columns: 1, columnWidth: 100, dx: 0, dy: 0 },
     groups: [
       {
         name: '基本图形',
@@ -25,10 +25,12 @@ export default function (graph) {
     },
   });
 
-  const normal = new NormalNode({});
+  const normal = new NormalNode({
+
+  });
   const duty = new Duty({
-    width: 160,
-    height: 40,
+    width: 80,
+    height: 20,
   });
 
   document.getElementById('stencilContainer').appendChild(stencil.container);

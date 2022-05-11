@@ -28,7 +28,7 @@
           >{{ item.Name }}</el-button>
         </el-button-group>
       </div>
-      <div class="qyui-cell col" style="height: 300px">
+      <div class="qyui-cell" style="height: 300px">
         <div class="qyui-cell col">
           <div class="qyui-cell row bd pd4">
             <el-tabs
@@ -39,16 +39,16 @@
               style="height: 100%"
             >
               <el-tab-pane name="data" label="数据集" style="height: 100%; overflow: auto">
-                <el-scrollbar>
-                  <el-tree
-                    :data="dataTreeData"
-                    node-key="title"
-                    :expand-on-click-node="false"
-                    default-expand-all
-                    highlight-current
-                    @node-click="handleNodeClick"
-                  />
-                </el-scrollbar>
+
+                <el-tree
+                  :data="dataTreeData"
+                  node-key="title"
+                  :expand-on-click-node="false"
+                  default-expand-all
+                  highlight-current
+                  @node-click="handleNodeClick"
+                />
+
               </el-tab-pane>
               <el-tab-pane name="func" label="函数">
                 <el-tree

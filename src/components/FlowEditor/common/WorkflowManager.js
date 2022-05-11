@@ -26,6 +26,10 @@ export default class WorkflowManager {
 
     this.validate = new ValidateWorkFlow(this);
 
+    this.quickNodeInfo = {};
+    this.quickEdgeInfo = {};
+    this.quickWorkFlowInfo = {};
+
     this.states = {
       CurrentNextId: -10000,
       ShowWorkFlowDlg: false,
@@ -36,6 +40,7 @@ export default class WorkflowManager {
       ShowDesDlg: false,
       ShowValidateDlg: false,
       ShowNodeUserDesDlg: false,
+      QuickShowType: 'flow',
 
     };
     this.expression = {
@@ -68,6 +73,12 @@ export default class WorkflowManager {
   async GetBasic() {
     const res = await GetBasic();
     this.SetBasic(res);
+    if (res.ErrorInfo) {
+      ElMessage({
+        message: res.ErrorInfo,
+        type: 'error',
+      });
+    }
   }
 
   SetBasic(data) {
@@ -80,7 +91,9 @@ export default class WorkflowManager {
     this.NoteList = data.WorkFlowNoteList;
     this.CompanyList = data.CompanyList;
     const RelationList = data.WorkFlowRelationList;
-    this.RelationList = RelationList.sort((a, b) => { return a.name.localeCompare(b.name, 'zh'); });
+    this.RelationList = RelationList.sort((a, b) => {
+      return a.name.localeCompare(b.name, 'zh');
+    });
   }
 
   CreateNewWorkFlowInfo() {
@@ -352,4 +365,18 @@ export default class WorkflowManager {
   //   });
   //   this.WorkFlowNoteList.splice(index, 1);
   // }
+  ShowNodeQuickInfo(node) {
+    this.quickNodeInfo = node;
+    this.states.QuickShowType = 'node';
+  }
+
+  ShowEdgeQuickInfo(edge) {
+    this.quickEdgeInfo = edge;
+    this.states.QuickShowType = 'edge';
+  }
+
+  ShowWorkFlowQuickInfo() {
+    this.quickWorkFlowInfo = this.WorkFlowInfo;
+    this.states.QuickShowType = 'flow';
+  }
 }

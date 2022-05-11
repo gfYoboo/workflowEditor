@@ -80,6 +80,15 @@ export default function (graph, manager) {
       graph.enableSelectionMovable();
     }
   });
+  graph.on('node:click', ({ node }) => {
+    manager.ShowNodeQuickInfo(node.getData());
+  });
+  graph.on('edge:click', ({ edge }) => {
+    manager.ShowEdgeQuickInfo(edge.getData());
+  });
+  graph.on('blank:click', () => {
+    manager.ShowWorkFlowQuickInfo();
+  });
 
   // 双击进入属性编辑页面
   graph.on('cell:dblclick', ({ e, x, y, cell, view }) => {
@@ -156,6 +165,15 @@ export default function (graph, manager) {
             d: 'M -8 0 -12 -6 4 0 -12 6 Z', // 嗯,我是天才
             'stroke-width': 1,
             fill: 'red',
+          },
+        },
+      },
+      {
+        name: 'segments',
+        args: {
+          snapRadius: 20,
+          attrs: {
+            fill: '#444',
           },
         },
       },

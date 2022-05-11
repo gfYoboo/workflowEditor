@@ -1,8 +1,8 @@
 import axios from 'axios';
-import config from '~/config';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { clearSession, getSession } from '@/utils/storage.js';
 import { EncryptParam } from './cryptoJS.js';
+import config from '~/config';
 // 配置新建一个 axios 实例
 const service = axios.create({
   baseURL: config[import.meta.env.MODE].baseUrl,

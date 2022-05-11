@@ -149,7 +149,21 @@ export default {
       }
     },
     PopSelectClient(fieldName) {
+      this.currentFieldName = fieldName;
       this.showDlg = true;
+      this.treeList = [];
+      for (const el in this.manager.ClientFunctionList) {
+        const item = { label: el, isFunc: false, children: [] };
+        for (let i = 0; i < this.manager.ClientFunctionList[el].length; i++) {
+          item.children.push({ label: this.manager.ClientFunctionList[el][i], isFunc: true });
+        }
+        this.treeList.push(item);
+      }
+      if (this.CurrentNode[fieldName]) {
+        this.list = this.CurrentNode[fieldName].split(';');
+      } else {
+        this.list = [];
+      }
     },
     currentTreeChange(row) {
       this.currentTreeRow = row;

@@ -76,6 +76,7 @@ export default () => {
         name: 'manhattan',
         args: {
           step: 5,
+
           // 排除职能带 部门 描述
           excludeShapes: ['duty', 'dutyorg', 'dutydes'],
         },
@@ -111,6 +112,8 @@ export default () => {
     selecting: {
       enabled: true,
       movable: true,
+      // 禁止多选
+      multiple: false,
       // 是否显示节点的选择框
       showNodeSelectionBox: false,
       // 是否显示边的选择框

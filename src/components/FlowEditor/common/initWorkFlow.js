@@ -99,10 +99,21 @@ export default (graph, manager) => {
     // 判断连接桩
     // 1,0.5,0; 3,0.5,1 ; 0,0
     const points = cond.PointList.split(';');
+    const vertices = [];
+    if (points[2] !== '0,0') {
+      for (let i = 2; i < points.length; i++) {
+        if (points[i] !== '') {
+          const item = points[i].split(',');
+          vertices.push({ x: Number(item[0]), y: Number(item[1]) });
+        }
+      }
+    }
+
     graph.addEdge({
       source: { cell: getNodeByDBID(graph, cond.NodeFrom_XID), port: GetProtID(points[0]) },
       target: { cell: getNodeByDBID(graph, cond.NodeTo_XID), port: GetProtID(points[1]) },
       data: cond,
+      vertices: vertices,
     });
   });
 };

@@ -7,10 +7,26 @@
         <el-button type="success" @click="handleWorkFlowNote">职能部门维护</el-button>
         <el-button type="success" @click="handleUndo">撤销</el-button>
         <el-button type="success" @click="handleRedo">重做</el-button>
+        <!-- <div>
+          <span>
+            <el-icon>
+              <refresh-left />
+            </el-icon>
+          </span>
+          <span></span>
+        </div>
+        <div>
+          <span>
+            <el-icon>
+              <refresh-right />
+            </el-icon>
+          </span>
+          <span></span>
+        </div>-->
       </div>
     </div>
     <div class="qyui-cell col">
-      <div class="qyui-cell" style="width: 200px">
+      <div class="qyui-cell" style="width: 120px">
         <div id="stencilContainer" style="position: relative; height: 100%; width: 100%"></div>
       </div>
       <div
@@ -20,6 +36,9 @@
         <div style="background: #ffffff; padding: 20px; border: 1px solid #888888">
           <div id="container"></div>
         </div>
+      </div>
+      <div class="qyui-cell" style="width: 300px">
+        <QuickShowInfo></QuickShowInfo>
       </div>
     </div>
     <workFlowInfo />
@@ -34,6 +53,7 @@
 </template>
 
 <script>
+
 import registerNode from './shape/index';
 // import registerTool from "./tool/index";
 
@@ -56,6 +76,7 @@ import registerEvent from './common/graphevent.js';
 import { computed } from 'vue';
 import { getQueryString } from '@/utils/index';
 import WorkflowManager from './common/WorkflowManager.js';
+import QuickShowInfo from './QuickShowInfo.vue';
 export default {
   name: 'FlowEditor',
   components: {
@@ -67,6 +88,7 @@ export default {
     EditExpression,
     ErrorMsg,
     WorkFlowNote,
+    QuickShowInfo,
   },
   provide() {
     return {
@@ -121,21 +143,26 @@ export default {
   },
   methods: {
     async initWorkFlow() {
-      // 获取基本信息
+      // 获取支撑流程图展示的基本信息
       await this.manager.GetBasic();
       if (this.demo) {
+        // 演示环境使用数据
         await this.manager.GetWorkFlowInfo(1);
         initWorkFlow(this.graph, this.manager);
       } else {
+        // 判断传入参数
         let WorkFlowId = getQueryString('id');
         if (WorkFlowId === '') {
           WorkFlowId = '0';
         }
         if (WorkFlowId === '0') {
+          // 默认空 或是0 为新建流程
           this.manager.CreateNewWorkFlowInfo();
           initNewWorkFlow(this.graph, this.manager);
         } else {
+          // 根据id获取流程数据
           await this.manager.GetWorkFlowInfo(WorkFlowId);
+          // 初始化流程展示
           initWorkFlow(this.graph, this.manager);
         }
       }
@@ -143,6 +170,13 @@ export default {
       this.loading = false;
     },
     getPointByPort(port) {
+      // 记录连接点和方向。现在只用了4个方向的中心点位置  所以都是0.5
+      // 比如 0,0.5：代表左边中心桩点
+      // 比如 1,0.5：代表底边中心桩点
+      // 比如 2,0.5：代表右边中心桩点
+      // 比如 3,0.5：代表顶边中心桩点
+      // 例如0,0.5;3,0.5;0,0 代表起始点左侧，终点的顶部，0，0代表无路径点 前代表x轴值 后代表Y轴值
+      // 如果有转折点，也就是路径点 vertices 0,0.5;3,0.5;100,100;200,200代表中间经过x:100,y:100,x:200,y:200这2个点
       switch (port) {
         case 'port_left':
           return '0,0.5';
@@ -155,12 +189,17 @@ export default {
       }
     },
     async handleSave() {
+      // 保存流程
       this.loading = true;
+      // 获取画布上的所有 元素
       const cells = this.graph.getCells();
+      // 待传输到后台的数据结构
       const WorkFlowNoteList = [];
       const WorkFlowConditionList = [];
       const WorkFlowNodeList = [];
+      // 循环处理节点信息
       cells.forEach(cell => {
+        // 职能带的处理
         if (cell.shape === 'duty') {
           const data = cell.getData();
           if (data.DBID !== '') {
@@ -169,13 +208,23 @@ export default {
             WorkFlowNoteList.push({ DBID: data.DBID, DispX: pos.x, DispY: pos.y, NoteName: data.NoteName, NoteName_Xid: data.NoteName_Xid || '', Des: data.Des });
           }
         }
+        // 边连接线的处理
         if (cell.shape === 'edge') {
           const data = cell.getData();
           if (data.DBID !== '') {
+            console.log(cell);
             // 边全部删除 重新创建
             const sourceId = this.graph.getCellById(cell.source.cell).getData().DBID;
             const targetId = this.graph.getCellById(cell.target.cell).getData().DBID;
-            const PointList = this.getPointByPort(cell.source.port) + ';' + this.getPointByPort(cell.target.port) + ';0,0';
+            let PointList = this.getPointByPort(cell.source.port) + ';' + this.getPointByPort(cell.target.port) + ';';
+            if (cell.vertices.length === 0) {
+              PointList += '0,0;';
+            } else {
+              cell.vertices.forEach(item => {
+                PointList += (item.x + ',' + item.y + ';');
+              });
+            }
+            // 业务上存储边
             WorkFlowConditionList.push(
               {
                 DBID: data.DBID,
@@ -189,6 +238,7 @@ export default {
               });
           }
         }
+        // 开始节点 节点 结束节点的处理
         if (
           cell.shape === 'start' ||
           cell.shape === 'normal' ||
@@ -203,8 +253,10 @@ export default {
         }
       });
       this.manager.WorkFlowNoteList = WorkFlowNoteList;
+      // 验证流程是否存在循环节点等
       const flag = await this.manager.validate.Validate(WorkFlowNodeList, WorkFlowConditionList);
       if (flag) {
+        // 保存流程 请求后端
         this.manager.SaveWorkFlow();
         this.loading = false;
       } else {
@@ -214,15 +266,19 @@ export default {
     },
 
     handleWorkFlow() {
+      // 显示流程属性维护窗口
       this.manager.states.ShowWorkFlowDlg = true;
     },
     handleWorkFlowNote() {
+      // 显示职能带维护
       this.manager.states.ShowWorkFlowNoteDlg = true;
     },
     handleUndo() {
+      // 撤销
       this.graph.undo();
     },
     handleRedo() {
+      // 回做
       this.graph.redo();
     },
   },
