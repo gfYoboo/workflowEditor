@@ -1,3 +1,4 @@
+
 export default function (graph, manager) {
   graph.on('node:added', ({ cell, index, options }) => {
     if (cell.shape === 'start' || cell.shape === 'normal' || cell.shape === 'end') {
@@ -115,25 +116,156 @@ export default function (graph, manager) {
       const nodes = graph.model.getNodes();
       let temY = 0;
       let temDuty = null;
+      let minY = 1000;
+
       nodes.forEach(item => {
         if (item.shape === 'duty') {
           if (item.position().y > temY) {
             temY = item.position().y;
+            if (temY < minY) {
+              minY = temY;
+            }
             temDuty = item;
           }
         }
       });
+
+      const tools = [];
+
       if (temDuty.id === node.id) {
-        node.addTools(
-          [
-            {
-              name: 'button-remove',
-              args: { x: 620, y: 10 },
-            },
-          ],
-          'onhover',
-        );
+        tools.push({
+          name: 'button-remove',
+          args: { x: 620, y: 10 },
+        });
       }
+      // 最上方的标题 和第一个职能带没有向上
+      if (node.position().y !== minY && node.position().y !== minY + 70) {
+        tools.push({
+          name: 'button',
+          args: {
+            markup: [
+              {
+                tagName: 'circle',
+                selector: 'button',
+                attrs: {
+                  r: 10,
+                  stroke: '#fe854f',
+                  strokeWidth: 2,
+                  fill: 'white',
+                  cursor: 'pointer',
+                },
+              },
+              {
+                tagName: 'text',
+                textContent: 'UP',
+                selector: 'icon',
+                attrs: {
+                  fill: '#fe854f',
+                  fontSize: 8,
+                  textAnchor: 'middle',
+                  pointerEvents: 'none',
+                  y: '0.3em',
+                },
+              },
+            ],
+            x: 620,
+            y: 60,
+            onClick: ({ cell }) => {
+              const shapY = cell.position().y;
+              const nodes = graph.model.getNodes();
+
+              let flagDuty = false;
+              for (let i = 0; i < nodes.length; i++) {
+                const item = nodes[i];
+                if (item.shape === 'duty' && !flagDuty) {
+                // 交换职能带的位置
+                  if (shapY === item.position().y + 70) {
+                    item.position(item.position().x, shapY, { deep: true });
+                    cell.position(cell.position().x, shapY - 70, { deep: true });
+                    flagDuty = true;
+                  }
+                }
+                if (item.shape === 'start' || item.shape === 'normal' || item.shape === 'end') {
+                // 当前职能带上的节点上移
+                  const nodeY1 = item.position().y;
+                  if (nodeY1 > shapY && nodeY1 < shapY + 70) {
+                    item.position(item.position().x, nodeY1 - 70);
+                  }
+                  // 职能带上的节点依次下移
+                  if (nodeY1 < shapY && nodeY1 > shapY - 70) {
+                    item.position(item.position().x, nodeY1 + 70);
+                  }
+                }
+              }
+              cell.removeTools();
+            },
+          },
+        });
+      }
+      // tools.push({
+      //   name: 'button',
+      //   args: {
+      //     markup: [
+      //       {
+      //         tagName: 'circle',
+      //         selector: 'button',
+      //         attrs: {
+      //           r: 10,
+      //           stroke: '#fe854f',
+      //           strokeWidth: 2,
+      //           fill: 'white',
+      //           cursor: 'pointer',
+      //         },
+      //       },
+      //       {
+      //         tagName: 'text',
+      //         textContent: 'Down',
+      //         selector: 'icon',
+      //         attrs: {
+      //           fill: '#fe854f',
+      //           fontSize: 8,
+      //           textAnchor: 'middle',
+      //           pointerEvents: 'none',
+      //           y: '0.3em',
+      //         },
+      //       },
+      //     ],
+      //     x: 620,
+      //     y: 50,
+      //     onClick: ({ cell }) => {
+      //       const shapY = cell.position().y;
+      //       const nodes = graph.model.getNodes();
+
+      //       let flagDuty = false;
+      //       for (let i = 0; i < nodes.length; i++) {
+      //         const item = nodes[i];
+      //         if (item.shape === 'duty' && !flagDuty) {
+      //           // 交换职能带的位置
+      //           if (shapY === item.position().y - 70) {
+      //             item.position(item.position().x, shapY, { deep: true });
+      //             cell.position(cell.position().x, shapY + 70, { deep: true });
+      //             flagDuty = true;
+      //           }
+      //         }
+      //         if (item.shape === 'start' || item.shape === 'normal' || item.shape === 'end') {
+      //           // 当前职能带上的节点下移
+      //           const nodeY1 = item.position().y;
+      //           if (nodeY1 > shapY && nodeY1 < shapY + 70) {
+      //             item.position(item.position().x, nodeY1 - 70);
+      //           }
+      //           // 下个职能带上的节点上移
+      //           if (nodeY1 < shapY && nodeY1 > shapY - 70) {
+      //             item.position(item.position().x, nodeY1 + 70);
+      //           }
+      //         }
+      //       }
+      //     },
+      //   },
+      // });
+
+      node.addTools(tools,
+        'onhover',
+      );
     }
   });
 
