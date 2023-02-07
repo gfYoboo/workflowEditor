@@ -2,7 +2,7 @@
   "name": "zs_flow_editor",
   "version": "1.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite -m development",
     "demo": "vite --mode demo",
     "build": "vite build",
     "build:demo": "vite build --mode demo",
@@ -11,16 +11,21 @@
     "lint-fix": "eslint --fix --ext .js,.vue src"
   },
   "dependencies": {
-    "@antv/x6": "^1.31.5",
-    "@element-plus/icons-vue": "^0.2.7",
+    "@antv/x6": "^2.2.1",
+    "@antv/x6-plugin-dnd": "^2.0.4",
+    "@antv/x6-plugin-keyboard": "^2.2.0",
+    "@antv/x6-plugin-selection": "^2.1.5",
+    "@antv/x6-plugin-snapline": "^2.1.6",
+    "@antv/x6-plugin-stencil": "^2.0.2",
+    "@element-plus/icons-vue": "^2.0.10",
     "axios": "^0.23.0",
     "crypto-js": "^4.1.1",
-    "element-plus": "^1.3.0-beta.5",
-    "vue": "^3.2.27"
+    "element-plus": "^2.2.29",
+    "vue": "^3.2.47"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.10.2",
-    "@vue/compiler-sfc": "^3.2.26",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/compiler-sfc": "^3.2.47",
     "@vue/eslint-config-standard": "^6.1.0",
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
@@ -33,8 +38,9 @@
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-uglify": "^6.0.4",
-    "sass": "^1.43.2",
-    "vite": "^2.7.10",
+    "sass": "^1.58.0",
+    "unplugin-auto-import": "^0.13.0",
+    "vite": "^4.1.1",
     "vite-plugin-mock": "^2.9.6"
   }
 }

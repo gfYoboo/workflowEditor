@@ -41,23 +41,22 @@
         <QuickShowInfo></QuickShowInfo>
       </div>
     </div>
-    <workFlowInfo />
-    <noteSelectList />
-    <dutyDesInfo />
-    <nodeInfo />
-    <edgeInfo />
-    <editExpression />
-    <errorMsg />
-    <workFlowNote />
+    <WorkFlowInfo />
+    <NoteSelectList />
+    <DutyDesInfo />
+    <NodeInfo />
+    <EdgeInfo />
+    <EditExpression />
+    <ErrorMsg />
+    <WorkFlowNote />
   </div>
 </template>
 
-<script>
+<script setup>
 
-import registerNode from './shape/index';
+import registerNode from './shape/index.js';
 // import registerTool from "./tool/index";
 
-import initGraph from './common/graph';
 import NoteSelectList from './Duty/DutyNoteSelectList.vue';
 import DutyDesInfo from './Duty/DutyDesInfo.vue';
 
@@ -71,216 +70,206 @@ import ErrorMsg from './ErrorMsg.vue';
 import initWorkFlow from './common/initWorkFlow';
 import initNewWorkFlow from './common/initNewWorkFlow';
 import InitialTemplate from './common/InitialTemplate';
-import registerEvent from './common/graphevent.js';
+import registerEvent from './config/events.js';
 
-import { computed } from 'vue';
+import { computed, provide } from 'vue';
 import { getQueryString } from '@/utils/index';
 import WorkflowManager from './common/WorkflowManager.js';
 import QuickShowInfo from './QuickShowInfo.vue';
-export default {
-  name: 'FlowEditor',
-  components: {
-    WorkFlowInfo,
-    NoteSelectList,
-    DutyDesInfo,
-    NodeInfo,
-    EdgeInfo,
-    EditExpression,
-    ErrorMsg,
-    WorkFlowNote,
-    QuickShowInfo,
-  },
-  provide() {
-    return {
-      graph: computed(() => this.graph),
-      manager: computed(() => this.manager),
-    };
-  },
-  data() {
-    const manager = new WorkflowManager();
-    return {
-      manager,
-      graph: null,
-      DicWorkFlowNoteList: [],
-      loading: true,
-      demo: import.meta.env.MODE === 'demo',
-    };
-  },
 
-  watch: {
-    'manager.WorkFlowInfo.Code': function (val) {
-      const flowcode = this.graph.getCellById('head_flowcode');
-      flowcode.label = '流程编号:' + val || '';
-    },
-    'manager.WorkFlowInfo.Name': function (val) {
-      const flowname = this.graph.getCellById('head_flowname');
-      flowname.label = '流程名称:' + val || '';
-    },
-  },
-  mounted() {
-    console.log(import.meta.env.MODE);
-    // 注册节点
-    registerNode();
+import useKeyboard from './plugin/useKeyboard.js';
+import useStencil from './plugin/useStencil.js';
 
-    // 初始化画布
-    this.graph = initGraph();
-    this.manager.graph = this.graph;
-    this.graph.disableHistory();
+import initGraph from './config/graph.js';
+const graph = ref(null);
+const manager = new WorkflowManager();
+provide('graph', graph);
+provide('manager', computed(() => { return manager; }));
+const DicWorkFlowNoteList = ref([]);
+const loading = ref(true);
+const demo = import.meta.env.MODE === 'demo';
 
-    // 注册工具
-    // registerTool();
+watch(() => manager.WorkFlowInfo.Code, (val) => {
+  const flowcode = graph.value.getCellById('head_flowcode');
+  flowcode.label = '流程编号:' + val || '';
+});
+watch(() => manager.WorkFlowInfo.Name, (val) => {
+  const flowname = this.graph.getCellById('head_flowname');
+  flowname.label = '流程名称:' + val || '';
+});
 
-    // 初始化模板
-    InitialTemplate(this.graph);
+onMounted(() => {
+  console.log(import.meta.env.MODE);
+  // 注册节点
+  registerNode();
 
-    // 注册画布事件
-    registerEvent(this.graph, this.manager);
-    // 加载流程数据
-    this.initWorkFlow();
-  },
-  beforeUnmount() {
-    this.graph.dispose();
-  },
-  methods: {
-    async initWorkFlow() {
-      // 获取支撑流程图展示的基本信息
-      await this.manager.GetBasic();
-      if (this.demo) {
-        // 演示环境使用数据
-        await this.manager.GetWorkFlowInfo(1);
-        initWorkFlow(this.graph, this.manager);
-      } else {
-        // 判断传入参数
-        let WorkFlowId = getQueryString('id');
-        if (WorkFlowId === '') {
-          WorkFlowId = '0';
-        }
-        if (WorkFlowId === '0') {
-          // 默认空 或是0 为新建流程
-          this.manager.CreateNewWorkFlowInfo();
-          initNewWorkFlow(this.graph, this.manager);
+  // 初始化画布
+  const graphObj = initGraph(document.getElementById('container'));
+
+  const stencil = useStencil(graphObj);
+  document.getElementById('stencilContainer').appendChild(stencil.container);
+
+  manager.graph = graphObj;
+
+  graph.value = graphObj;
+
+  // this.graph.disableHistory();
+
+  // 注册工具
+  // registerTool();
+
+  // 初始化模板
+  InitialTemplate(graphObj);
+
+  // 注册画布事件
+  registerEvent(graphObj, manager);
+  // 加载流程数据
+  init();
+});
+
+onBeforeUnmount(() => {
+  graph.value.dispose();
+});
+
+async function init() {
+// 获取支撑流程图展示的基本信息
+  await manager.GetBasic();
+  if (demo) {
+    // 演示环境使用数据
+    await manager.GetWorkFlowInfo(1);
+    initWorkFlow(graph.value, manager);
+  } else {
+    // 判断传入参数
+    let WorkFlowId = getQueryString('id');
+    if (WorkFlowId === '') {
+      WorkFlowId = '0';
+    }
+    if (WorkFlowId === '0') {
+      // 默认空 或是0 为新建流程
+      manager.CreateNewWorkFlowInfo();
+      initNewWorkFlow(graph.value, manager);
+    } else {
+      // 根据id获取流程数据
+      await manager.GetWorkFlowInfo(WorkFlowId);
+      // 初始化流程展示
+      initWorkFlow(graph.value, manager);
+    }
+  }
+  // graph.value.enableHistory();
+  loading.value = false;
+};
+
+function getPointByPort(port) {
+  // 记录连接点和方向。现在只用了4个方向的中心点位置  所以都是0.5
+  // 比如 0,0.5：代表左边中心桩点
+  // 比如 1,0.5：代表底边中心桩点
+  // 比如 2,0.5：代表右边中心桩点
+  // 比如 3,0.5：代表顶边中心桩点
+  // 例如0,0.5;3,0.5;0,0 代表起始点左侧，终点的顶部，0，0代表无路径点 前代表x轴值 后代表Y轴值
+  // 如果有转折点，也就是路径点 vertices 0,0.5;3,0.5;100,100;200,200代表中间经过x:100,y:100,x:200,y:200这2个点
+  switch (port) {
+    case 'port_left':
+      return '0,0.5';
+    case 'port_bottom':
+      return '1,0.5';
+    case 'port_right':
+      return '2,0.5';
+    case 'port_top':
+      return '3,0.5';
+  }
+}
+
+async function handleSave() {
+  // 保存流程
+  loading.value = true;
+  // 获取画布上的所有 元素
+  const cells = graph.value.getCells();
+  // 待传输到后台的数据结构
+  const WorkFlowNoteList = [];
+  const WorkFlowConditionList = [];
+  const WorkFlowNodeList = [];
+  // 循环处理节点信息
+  cells.forEach(cell => {
+    // 职能带的处理
+    if (cell.shape === 'duty') {
+      const data = cell.getData();
+      if (data.DBID !== '') {
+        // 职能带全部删除 重新创建
+        const pos = cell.position();
+        WorkFlowNoteList.push({ DBID: data.DBID, DispX: pos.x, DispY: pos.y, NoteName: data.NoteName, NoteName_Xid: data.NoteName_Xid || '', Des: data.Des });
+      }
+    }
+    // 边连接线的处理
+    if (cell.shape === 'edge') {
+      const data = cell.getData();
+      if (data.DBID !== '') {
+        // 边全部删除 重新创建
+        const sourceId = graph.value.getCellById(cell.source.cell).getData().DBID;
+        const targetId = graph.value.getCellById(cell.target.cell).getData().DBID;
+        let PointList = getPointByPort(cell.source.port) + ';' + this.getPointByPort(cell.target.port) + ';';
+        if (cell.vertices.length === 0) {
+          PointList += '0,0;';
         } else {
-          // 根据id获取流程数据
-          await this.manager.GetWorkFlowInfo(WorkFlowId);
-          // 初始化流程展示
-          initWorkFlow(this.graph, this.manager);
+          cell.vertices.forEach(item => {
+            PointList += (item.x + ',' + item.y + ';');
+          });
         }
+        // 业务上存储边
+        WorkFlowConditionList.push(
+          {
+            DBID: data.DBID,
+            ConditionPIM: data.ConditionPIM,
+            ConditionPSM: data.ConditionPSM,
+            Description: data.Description,
+            NodeFrom_XID: sourceId,
+            NodeTo_XID: targetId,
+            Parameter: data.Parameter,
+            PointList: PointList,
+          });
       }
-      this.graph.enableHistory();
-      this.loading = false;
-    },
-    getPointByPort(port) {
-      // 记录连接点和方向。现在只用了4个方向的中心点位置  所以都是0.5
-      // 比如 0,0.5：代表左边中心桩点
-      // 比如 1,0.5：代表底边中心桩点
-      // 比如 2,0.5：代表右边中心桩点
-      // 比如 3,0.5：代表顶边中心桩点
-      // 例如0,0.5;3,0.5;0,0 代表起始点左侧，终点的顶部，0，0代表无路径点 前代表x轴值 后代表Y轴值
-      // 如果有转折点，也就是路径点 vertices 0,0.5;3,0.5;100,100;200,200代表中间经过x:100,y:100,x:200,y:200这2个点
-      switch (port) {
-        case 'port_left':
-          return '0,0.5';
-        case 'port_bottom':
-          return '1,0.5';
-        case 'port_right':
-          return '2,0.5';
-        case 'port_top':
-          return '3,0.5';
-      }
-    },
-    async handleSave() {
-      // 保存流程
-      this.loading = true;
-      // 获取画布上的所有 元素
-      const cells = this.graph.getCells();
-      // 待传输到后台的数据结构
-      const WorkFlowNoteList = [];
-      const WorkFlowConditionList = [];
-      const WorkFlowNodeList = [];
-      // 循环处理节点信息
-      cells.forEach(cell => {
-        // 职能带的处理
-        if (cell.shape === 'duty') {
-          const data = cell.getData();
-          if (data.DBID !== '') {
-            // 职能带全部删除 重新创建
-            const pos = cell.position();
-            WorkFlowNoteList.push({ DBID: data.DBID, DispX: pos.x, DispY: pos.y, NoteName: data.NoteName, NoteName_Xid: data.NoteName_Xid || '', Des: data.Des });
-          }
-        }
-        // 边连接线的处理
-        if (cell.shape === 'edge') {
-          const data = cell.getData();
-          if (data.DBID !== '') {
-            console.log(cell);
-            // 边全部删除 重新创建
-            const sourceId = this.graph.getCellById(cell.source.cell).getData().DBID;
-            const targetId = this.graph.getCellById(cell.target.cell).getData().DBID;
-            let PointList = this.getPointByPort(cell.source.port) + ';' + this.getPointByPort(cell.target.port) + ';';
-            if (cell.vertices.length === 0) {
-              PointList += '0,0;';
-            } else {
-              cell.vertices.forEach(item => {
-                PointList += (item.x + ',' + item.y + ';');
-              });
-            }
-            // 业务上存储边
-            WorkFlowConditionList.push(
-              {
-                DBID: data.DBID,
-                ConditionPIM: data.ConditionPIM,
-                ConditionPSM: data.ConditionPSM,
-                Description: data.Description,
-                NodeFrom_XID: sourceId,
-                NodeTo_XID: targetId,
-                Parameter: data.Parameter,
-                PointList: PointList,
-              });
-          }
-        }
-        // 开始节点 节点 结束节点的处理
-        if (
-          cell.shape === 'start' ||
+    }
+    // 开始节点 节点 结束节点的处理
+    if (
+      cell.shape === 'start' ||
           cell.shape === 'normal' ||
           cell.shape === 'end'
-        ) {
-          const data = cell.getData();
-          const pos = cell.position();
+    ) {
+      const data = cell.getData();
+      const pos = cell.position();
 
-          data.NodeX = pos.x;
-          data.NodeY = pos.y;
-          WorkFlowNodeList.push(data);
-        }
-      });
-      this.manager.WorkFlowNoteList = WorkFlowNoteList;
-      // 验证流程是否存在循环节点等
-      const flag = await this.manager.validate.Validate(WorkFlowNodeList, WorkFlowConditionList);
-      if (flag) {
-        // 保存流程 请求后端
-        this.manager.SaveWorkFlow();
-        this.loading = false;
-      } else {
-        this.manager.states.ShowValidateDlg = true;
-        this.loading = false;
-      }
-    },
+      data.NodeX = pos.x;
+      data.NodeY = pos.y;
+      WorkFlowNodeList.push(data);
+    }
+  });
+  manager.WorkFlowNoteList = WorkFlowNoteList;
+  // 验证流程是否存在循环节点等
+  const flag = await manager.validate.Validate(WorkFlowNodeList, WorkFlowConditionList);
+  if (flag) {
+    // 保存流程 请求后端
+    manager.SaveWorkFlow();
+    loading.value = false;
+  } else {
+    manager.states.ShowValidateDlg = true;
+    loading.value = false;
+  }
+}
 
-    handleWorkFlow() {
-      // 显示流程属性维护窗口
-      this.manager.states.ShowWorkFlowDlg = true;
-    },
-    handleWorkFlowNote() {
-      // 显示职能带维护
-      this.manager.states.ShowWorkFlowNoteDlg = true;
-    },
-    handleUndo() {
-      // 撤销
-      this.graph.undo();
-    },
-    handleRedo() {
-      // 回做
-      this.graph.redo();
-    },
-  },
-};
+function handleWorkFlow() {
+  // 显示流程属性维护窗口
+  manager.states.ShowWorkFlowDlg = true;
+}
+function handleWorkFlowNote() {
+  // 显示职能带维护
+  manager.states.ShowWorkFlowNoteDlg = true;
+}
+function handleUndo() {
+  // 撤销
+  graph.value.undo();
+}
+function handleRedo() {
+  // 回做
+  graph.value.redo();
+}
+
 </script>

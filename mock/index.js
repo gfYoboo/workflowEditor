@@ -1,7 +1,7 @@
-import { createProdMockServer } from "vite-plugin-mock/es/createProdMockServer";
+import { createProdMockServer } from 'vite-plugin-mock/es/createProdMockServer';
 
-import expression from "./modules/expression";
-import workflow from "./modules/workflow";
+import expression from './modules/expression';
+import workflow from './modules/workflow';
 
 export function setupProdMockServer() {
   const mocks = [];

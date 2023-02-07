@@ -1,5 +1,5 @@
 import { Shape } from '@antv/x6';
-export default class ShapeImg extends Shape.BorderedImage {
+export default class ShapeImg extends Shape.Image {
 
 }
 ShapeImg.config({

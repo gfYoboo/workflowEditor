@@ -1,24 +1,24 @@
-import request from "@/utils/request";
+import request from '@/utils/request';
 
 export function GetExpressionOperatorList() {
   return request(
     {
-      url: "/api/Common/GetExpressionOperatorList",
-      data: { runType: "Server" },
+      url: '/api/Common/GetExpressionOperatorList',
+      data: { runType: 'Server' },
     });
 }
 export function GetExpressionFunctionList() {
   return request(
     {
-      url: "/api/Common/GetExpressionFunctionList",
-      data: { runType: "Server" },
+      url: '/api/Common/GetExpressionFunctionList',
+      data: { runType: 'Server' },
     });
 }
 
 export function ValidateExpression(param) {
   return request(
     {
-      url: "/api/Expression/ValidateExpression",
+      url: '/api/Expression/ValidateExpression',
       data: param,
     },
   );
@@ -26,7 +26,7 @@ export function ValidateExpression(param) {
 
 export function GetSheetWindowMainCardModel(sheetWindowName, useEnName) {
   return request({
-    url: "/api/Model/GetSheetWindowMainCardModel",
+    url: '/api/Model/GetSheetWindowMainCardModel',
     data: {
       SheetWindowName: sheetWindowName,
       UseEnName: useEnName,

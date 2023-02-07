@@ -6,13 +6,16 @@ import ViteMockServe from './ViteMockServe';
 import uglify from 'rollup-plugin-uglify';
 // 配置Rollup支持CommonJS规范用以识别CommonJS规范的依赖
 // import commonjs from 'rollup-plugin-commonjs';
+import createAutoImport from './auto-import.js';
 
 export default function createVitePlugins(viteEnv, mode, isBuild = false) {
   const vitePlugins = [vue()];
+  vitePlugins.push(createAutoImport());
+
   // vitePlugins.push(nodeResolve());
   // vitePlugins.push(commonjs());
   if (mode === 'demo') {
-    vitePlugins.push(ViteMockServe);
+    vitePlugins.push(ViteMockServe());
   }
   if (viteEnv === 'production') {
     vitePlugins.push(

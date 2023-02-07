@@ -1,5 +1,4 @@
-
-export default function (graph, manager) {
+export default (graph, manager) => {
   graph.on('node:added', ({ cell, index, options }) => {
     if (cell.shape === 'start' || cell.shape === 'normal' || cell.shape === 'end') {
       if (cell.getData().DBID === '') {
@@ -178,7 +177,7 @@ export default function (graph, manager) {
               for (let i = 0; i < nodes.length; i++) {
                 const item = nodes[i];
                 if (item.shape === 'duty' && !flagDuty) {
-                // 交换职能带的位置
+                  // 交换职能带的位置
                   if (shapY === item.position().y + 70) {
                     item.position(item.position().x, shapY, { deep: true });
                     cell.position(cell.position().x, shapY - 70, { deep: true });
@@ -186,7 +185,7 @@ export default function (graph, manager) {
                   }
                 }
                 if (item.shape === 'start' || item.shape === 'normal' || item.shape === 'end') {
-                // 当前职能带上的节点上移
+                  // 当前职能带上的节点上移
                   const nodeY1 = item.position().y;
                   if (nodeY1 > shapY && nodeY1 < shapY + 70) {
                     item.position(item.position().x, nodeY1 - 70);
@@ -414,4 +413,4 @@ export default function (graph, manager) {
     }
     return false;
   }, 'keydown');
-}
+};

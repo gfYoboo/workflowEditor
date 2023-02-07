@@ -55,4 +55,12 @@ module.exports = {
     // 组件名必须是多个单词
     'vue/multi-word-component-names': 'off',
   },
+  globals: {
+    ref: 'readonly',
+    reactive: 'readonly',
+    watch: 'readonly',
+    computed: 'readonly',
+    onMounted: 'readonly',
+    onBeforeUnmount: 'readonly',
+  },
 };

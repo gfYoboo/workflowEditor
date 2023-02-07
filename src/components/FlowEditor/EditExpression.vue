@@ -142,7 +142,6 @@ export default {
       Expression: '',
       PsmExpression: '',
       ParameterXml: '',
-
       SheetWindowName: '',
       UseEnName: false,
       Changed: false,
@@ -199,7 +198,7 @@ export default {
       }
       if (this.funcTreeData.length === 0) {
         const resFunc = await GetExpressionFunctionList();
-        if (resFunc.Success && resFunc.Data && resFunc.Data.length > 0) {
+        if (resFunc.Data && resFunc.Data.length > 0) {
           const funcList = [];
           resFunc.Data.forEach((item) => {
             funcList.push({
@@ -383,7 +382,7 @@ export default {
           UseEnName: this.UseEnName,
           RunOnDB: false,
           RunOnServer: true,
-          RunAsJS: false,
+          RunAsJS: true,
         };
         const res = await ValidateExpression(param);
         if (res && res.Code === 'S') {
@@ -457,6 +456,7 @@ export default {
       }
     },
     TranslateReturnValueType(type) {
+      console.log(type);
       switch (type.toLowerCase()) {
         case 'boolexpression': {
           return '是/否';

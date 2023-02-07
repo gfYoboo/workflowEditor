@@ -2,11 +2,9 @@
   <FlowEditor />
 </template>
 
-<script >
+<script  setup>
 import FlowEditor from './components/FlowEditor/index.vue';
-export default {
-  components: { FlowEditor },
-};
+
 </script>
 
 <style>
