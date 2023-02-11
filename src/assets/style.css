@@ -6,12 +6,15 @@ li {
 }
 
 a,
-button,span,li {
+button,
+span,
+li {
   user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   text-decoration: none;
 }
+
 .qyui-cell {
   flex: 1;
   display: flex;
@@ -52,7 +55,7 @@ button,span,li {
   min-width: 1px;
 }
 
-.qyui-cell > .qyui-cell:not(.row):not(.col) {
+.qyui-cell>.qyui-cell:not(.row):not(.col) {
   flex: 0 1 auto;
 }
 
@@ -249,6 +252,7 @@ button,span,li {
   border-radius: 2px 2px 0 0;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-right: 0
 }
 
 .el-dialog__body {
@@ -256,14 +260,15 @@ button,span,li {
 }
 
 .el-dialog__headerbtn {
-  top: 10px !important;
-  right: 15px !important;
   font-size: 20px !important;
+  height: 43px;
+  line-height: 43px;
 }
 
 .el-dialog__headerbtn .el-dialog__close {
   color: #fff !important;
 }
+
 .el-form-item {
   margin-bottom: 6px !important;
 }

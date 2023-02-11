@@ -1,6 +1,5 @@
 <template>
   <el-dialog
-    v-model="showDlg"
     title="流程属性"
     width="500px"
     :close-on-click-modal="false"
@@ -52,56 +51,30 @@
   </el-dialog>
 </template>
 
-<script>
-import { inject } from 'vue';
+<script setup>
 
-export default {
-  setup() {
-    const graph = inject('graph');
-    const manager = inject('manager');
-    return {
-      graph,
-      manager,
-    };
-  },
-  data() {
-    return {
-      flow: {
-        Code: '',
-        Name: '',
-        DocTypeName: '',
-        IsActive: 'Y',
-        IsStandard: 'Y',
-        IsSubWorkFlow: 'N',
-        Organization_xID: '',
-      },
-      DocTypeList: [],
-    };
-  },
-  computed: {
-    showDlg: {
-      get() {
-        return this.manager.states.ShowWorkFlowDlg;
-      },
-      set(data) {
-        this.manager.states.ShowWorkFlowDlg = data;
-      },
-    },
-  },
-  methods: {
-    openDlg() {
-      this.flow = JSON.parse(JSON.stringify(this.manager.WorkFlowInfo));
-    },
-    handleConfirm() {
-      this.manager.UpdateWorkFlowInfo(this.flow);
-      this.showDlg = false;
-    },
-    handleCancel() {
-      this.showDlg = false;
-    },
-    handleEdit() { },
-  },
-};
+const manager = inject('manager');
+
+const flow = reactive({
+  Code: '',
+  Name: '',
+  DocTypeName: '',
+  IsActive: 'Y',
+  IsStandard: 'Y',
+  IsSubWorkFlow: 'N',
+  Organization_xID: '',
+});
+
+function openDlg() {
+  Object.assign(flow, JSON.parse(JSON.stringify(manager.WorkFlowInfo)));
+}
+function handleConfirm() {
+  manager.UpdateWorkFlowInfo(flow);
+}
+function handleCancel() {
+}
+function handleEdit() { }
+
 </script>
 
 <style></style>

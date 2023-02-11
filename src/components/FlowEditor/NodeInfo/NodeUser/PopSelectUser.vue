@@ -5,7 +5,7 @@
     title="选择用户"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    custom-class="UserListDialog"
+    class="UserListDialog"
     destroy-on-close
     width="610px"
     @opened="loadUserList"

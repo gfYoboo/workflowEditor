@@ -41,8 +41,8 @@
         <QuickShowInfo></QuickShowInfo>
       </div>
     </div>
-    <WorkFlowInfo />
-    <NoteSelectList />
+    <WorkFlowInfo v-model="ShowWorkFlowDlg" />
+    <NoteSelectList v-model="ShowWorkFlowNoteDlg" />
     <DutyDesInfo />
     <NodeInfo />
     <EdgeInfo />
@@ -79,13 +79,14 @@ import QuickShowInfo from './QuickShowInfo.vue';
 
 import useKeyboard from './plugin/useKeyboard.js';
 import useStencil from './plugin/useStencil.js';
-
+import useSelecting from './plugin/useSelecting.js';
+import useHistory from './plugin/useHistory.js';
 import initGraph from './config/graph.js';
 const graph = ref(null);
-const manager = new WorkflowManager();
+const manager = reactive(new WorkflowManager());
 provide('graph', graph);
-provide('manager', computed(() => { return manager; }));
-const DicWorkFlowNoteList = ref([]);
+provide('manager', manager);
+// const DicWorkFlowNoteList = ref([]);
 const loading = ref(true);
 const demo = import.meta.env.MODE === 'demo';
 
@@ -94,11 +95,11 @@ watch(() => manager.WorkFlowInfo.Code, (val) => {
   flowcode.label = '流程编号:' + val || '';
 });
 watch(() => manager.WorkFlowInfo.Name, (val) => {
-  const flowname = this.graph.getCellById('head_flowname');
+  const flowname = graph.value.getCellById('head_flowname');
   flowname.label = '流程名称:' + val || '';
 });
 
-onMounted(() => {
+onMounted(async () => {
   console.log(import.meta.env.MODE);
   // 注册节点
   registerNode();
@@ -107,13 +108,13 @@ onMounted(() => {
   const graphObj = initGraph(document.getElementById('container'));
 
   const stencil = useStencil(graphObj);
+  useSelecting(graphObj);
+  useKeyboard(graphObj);
   document.getElementById('stencilContainer').appendChild(stencil.container);
 
   manager.graph = graphObj;
 
   graph.value = graphObj;
-
-  // this.graph.disableHistory();
 
   // 注册工具
   // registerTool();
@@ -124,7 +125,8 @@ onMounted(() => {
   // 注册画布事件
   registerEvent(graphObj, manager);
   // 加载流程数据
-  init();
+  await init();
+  useHistory(graphObj);
 });
 
 onBeforeUnmount(() => {
@@ -132,7 +134,7 @@ onBeforeUnmount(() => {
 });
 
 async function init() {
-// 获取支撑流程图展示的基本信息
+  // 获取支撑流程图展示的基本信息
   await manager.GetBasic();
   if (demo) {
     // 演示环境使用数据
@@ -155,7 +157,7 @@ async function init() {
       initWorkFlow(graph.value, manager);
     }
   }
-  // graph.value.enableHistory();
+  graph.value.enableHistory();
   loading.value = false;
 };
 
@@ -254,14 +256,15 @@ async function handleSave() {
     loading.value = false;
   }
 }
-
+const ShowWorkFlowDlg = ref(false);
 function handleWorkFlow() {
   // 显示流程属性维护窗口
-  manager.states.ShowWorkFlowDlg = true;
+  ShowWorkFlowDlg.value = true;
 }
+const ShowWorkFlowNoteDlg = ref(false);
 function handleWorkFlowNote() {
   // 显示职能带维护
-  manager.states.ShowWorkFlowNoteDlg = true;
+  ShowWorkFlowNoteDlg.value = true;
 }
 function handleUndo() {
   // 撤销

@@ -1,6 +1,7 @@
 import { Graph } from '@antv/x6';
 import connecting from './connecting.js';
 import highlighting from './highlighting.js';
+
 export default (el) => {
   // 初始化画布
   const graphObj = new Graph({
@@ -41,8 +42,8 @@ export default (el) => {
         }
       },
     },
-    connecting,
-    highlighting,
+    connecting: { ...connecting },
+    highlighting: { ...highlighting },
 
   });
   return graphObj;

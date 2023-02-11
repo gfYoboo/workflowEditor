@@ -32,10 +32,6 @@ export default class WorkflowManager {
 
     this.states = {
       CurrentNextId: -10000,
-      ShowWorkFlowDlg: false,
-      ShowWorkFlowNoteDlg: false,
-      // 职能带部门弹出
-      ShowNoteSelectListDlg: false,
 
       ShowDesDlg: false,
       ShowValidateDlg: false,

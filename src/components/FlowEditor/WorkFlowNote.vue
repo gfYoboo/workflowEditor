@@ -1,6 +1,5 @@
 <template>
   <el-dialog
-    v-model="showDlg"
     title="职能带维护"
     width="700px"
     :close-on-click-modal="false"
@@ -82,17 +81,7 @@ export default {
       },
     };
   },
-  computed: {
 
-    showDlg: {
-      get() {
-        return this.manager.states.ShowWorkFlowNoteDlg;
-      },
-      set(data) {
-        this.manager.states.ShowWorkFlowNoteDlg = data;
-      },
-    },
-  },
   methods: {
     handleSelect(item) {
       this.currentItem = item;

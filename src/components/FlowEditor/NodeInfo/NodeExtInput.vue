@@ -2,7 +2,7 @@
   <el-col :span="12">
     <el-form-item :label="label">
       <el-input
-        :value="showValue"
+        :modelValue="showValue"
         type="textarea"
         :rows="3"
         readonly
