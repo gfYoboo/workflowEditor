@@ -5,6 +5,7 @@ export default (graph) => {
     x: 0,
     y: 0,
   });
+
   graph.addNode({
     shape: 'shapetext',
     x: 80,
@@ -18,8 +19,8 @@ export default (graph) => {
         fontWeight: 'bold',
       },
     },
-
   });
+
   graph.addNode({
     shape: 'shapetext',
     id: 'head_flowcode',
@@ -36,6 +37,7 @@ export default (graph) => {
       },
     },
   });
+
   graph.addNode({
     shape: 'shapetext',
     id: 'head_flowname',

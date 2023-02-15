@@ -11,7 +11,7 @@
     "lint-fix": "eslint --fix --ext .js,.vue src"
   },
   "dependencies": {
-    "@antv/x6": "^2.2.1",
+    "@antv/x6": "^2.3.0",
     "@antv/x6-plugin-dnd": "^2.0.4",
     "@antv/x6-plugin-history": "^2.1.2",
     "@antv/x6-plugin-keyboard": "^2.2.0",

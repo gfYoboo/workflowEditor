@@ -281,7 +281,7 @@ export default (graph, manager) => {
         args: {
           tagName: 'circle',
           attrs: {
-            r: 2,
+            r: 4,
             stroke: '#fe854f',
             'stroke-width': 2,
             fill: 'red',
@@ -299,15 +299,15 @@ export default (graph, manager) => {
           },
         },
       },
-      {
-        name: 'segments',
-        args: {
-          snapRadius: 20,
-          attrs: {
-            fill: '#444',
-          },
-        },
-      },
+      // {
+      //   name: 'segments',
+      //   args: {
+      //     snapRadius: 20,
+      //     attrs: {
+      //       fill: '#444',
+      //     },
+      //   },
+      // },
     ]);
   });
   graph.on('edge:mouseleave', ({ cell }) => {

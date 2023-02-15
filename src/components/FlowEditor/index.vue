@@ -72,18 +72,16 @@ import initNewWorkFlow from './common/initNewWorkFlow';
 import InitialTemplate from './common/InitialTemplate';
 import registerEvent from './config/events.js';
 
-import { computed, provide } from 'vue';
 import { getQueryString } from '@/utils/index';
 import WorkflowManager from './common/WorkflowManager.js';
 import QuickShowInfo from './QuickShowInfo.vue';
 
-import useKeyboard from './plugin/useKeyboard.js';
-import useStencil from './plugin/useStencil.js';
-import useSelecting from './plugin/useSelecting.js';
-import useHistory from './plugin/useHistory.js';
-import initGraph from './config/graph.js';
+import createGraph from './config/graph.js';
+
 const graph = ref(null);
+
 const manager = reactive(new WorkflowManager());
+
 provide('graph', graph);
 provide('manager', manager);
 // const DicWorkFlowNoteList = ref([]);
@@ -103,30 +101,17 @@ onMounted(async () => {
   console.log(import.meta.env.MODE);
   // 注册节点
   registerNode();
-
   // 初始化画布
-  const graphObj = initGraph(document.getElementById('container'));
-
-  const stencil = useStencil(graphObj);
-  useSelecting(graphObj);
-  useKeyboard(graphObj);
-  document.getElementById('stencilContainer').appendChild(stencil.container);
-
-  manager.graph = graphObj;
-
+  const graphObj = createGraph('container', 'stencilContainer');
   graph.value = graphObj;
-
   // 注册工具
   // registerTool();
-
   // 初始化模板
   InitialTemplate(graphObj);
-
   // 注册画布事件
   registerEvent(graphObj, manager);
   // 加载流程数据
   await init();
-  useHistory(graphObj);
 });
 
 onBeforeUnmount(() => {

@@ -7,7 +7,6 @@ export default class WorkflowManager {
     this.workflowId = '';
 
     this.CurrentCell = '';
-    this.graph = '';
 
     this.DocTypeAndWindow = '';
     this.ClientFunctionList = '';
