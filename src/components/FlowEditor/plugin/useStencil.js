@@ -1,8 +1,5 @@
 import { Stencil } from '@antv/x6-plugin-stencil';
 
-import NormalNode from '../shape/NormalNode';
-import Duty from '../shape/Duty';
-
 export default (graph) => {
   // #region 初始化 stencil
   const stencil = new Stencil({
@@ -22,7 +19,7 @@ export default (graph) => {
 
     getDragNode: (node) => {
       const n = node.clone();
-      if (node instanceof Duty) {
+      if (node.shape === 'duty') {
         n.size(910, 70);
         return n;
       } else {
@@ -31,12 +28,13 @@ export default (graph) => {
     },
   });
 
-  const normal = new NormalNode({
-  });
-  const duty = new Duty({
+  const normal = graph.createNode({ shape: 'normal' });
+  const duty = graph.createNode({
+    shape: 'duty',
     width: 80,
     height: 20,
   });
+
   stencil.load([normal, duty], 'basic');
 
   return stencil;

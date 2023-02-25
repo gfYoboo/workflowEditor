@@ -1,11 +1,5 @@
 <template>
-  <el-dialog
-    title="流程属性"
-    width="500px"
-    :close-on-click-modal="false"
-    destroy-on-close
-    @open="openDlg"
-  >
+  <el-dialog title="流程属性" width="500px" :close-on-click-modal="false" destroy-on-close @open="openDlg">
     <el-form label-width="100px">
       <el-form-item label="流程编号">
         <el-input v-model="flow.Code" placeholder="流程编号自动生成" :disabled="true" />
@@ -15,22 +9,12 @@
       </el-form-item>
       <el-form-item label="单据类型">
         <el-select v-model="flow.DocTypeName" filterable placeholder="请选择单据类型">
-          <el-option
-            v-for="(w, docType) in manager.DocTypeAndWindow"
-            :key="docType"
-            :label="docType"
-            :value="docType"
-          />
+          <el-option v-for="(w, docType) in manager.DocTypeAndWindow" :key="docType" :label="docType" :value="docType" />
         </el-select>
       </el-form-item>
       <el-form-item label="单位名称">
         <el-select v-model="flow.Organization_xID" placeholder="请选择单位名称">
-          <el-option
-            v-for="item in manager.CompanyList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          />
+          <el-option v-for="item in manager.CompanyList" :key="item.id" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
 

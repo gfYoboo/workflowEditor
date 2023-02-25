@@ -37,18 +37,9 @@
   </div>
 </template>
 
-<script>
-import { inject } from 'vue';
+<script setup>
+const manager = inject('manager');
 
-export default {
-  setup() {
-    const manager = inject('manager');
-    return {
-      manager,
-    };
-  },
-};
 </script>
 
-<style>
-</style>
+<style></style>

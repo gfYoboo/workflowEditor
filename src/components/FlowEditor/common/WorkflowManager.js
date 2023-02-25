@@ -59,6 +59,13 @@ export default class WorkflowManager {
         CheckWindowFactorList: [],
       },
     };
+    this.dutyCellIds = [];
+  }
+
+  addDutyCellId(id) {
+    if (!this.dutyCellIds.includes(id)) {
+      this.dutyCellIds.push(id);
+    }
   }
 
   getNextId() {

@@ -39,29 +39,15 @@
       </el-row>
       <el-row>
         <el-form-item>
-          <el-checkbox
-            v-model="CurrentNode.MustHaveAttachment"
-            true-label="Y"
-            false-label="N"
-          >是否必须有附件</el-checkbox>
+          <el-checkbox v-model="CurrentNode.MustHaveAttachment" true-label="Y" false-label="N">是否必须有附件</el-checkbox>
         </el-form-item>
       </el-row>
     </el-form>
   </div>
 </template>
 
-<script>
+<script setup>
 import { inject } from 'vue';
-export default {
-  setup() {
-    const CurrentNode = inject('CurrentNode');
-    return {
-      CurrentNode,
-    };
-  },
-  data() {
-    return {};
-  },
+const CurrentNode = inject('CurrentNode');
 
-};
 </script>

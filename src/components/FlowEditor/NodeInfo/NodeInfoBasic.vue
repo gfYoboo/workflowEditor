@@ -74,29 +74,17 @@
         </el-form-item>
 
         <el-form-item>
-          <el-checkbox
-            v-model="CurrentNode.AllowEditDocument"
-            true-label="Y"
-            false-label="N"
-          >是否允许编辑文档</el-checkbox>
+          <el-checkbox v-model="CurrentNode.AllowEditDocument" true-label="Y" false-label="N">是否允许编辑文档</el-checkbox>
         </el-form-item>
 
         <el-form-item>
-          <el-checkbox
-            v-model="CurrentNode.AllowPrintDocument"
-            true-label="Y"
-            false-label="N"
-          >是否允许打印文档</el-checkbox>
+          <el-checkbox v-model="CurrentNode.AllowPrintDocument" true-label="Y" false-label="N">是否允许打印文档</el-checkbox>
         </el-form-item>
       </el-row>
 
       <el-row>
         <el-form-item>
-          <el-checkbox
-            v-model="CurrentNode.CanSelectBackToNode"
-            true-label="Y"
-            false-label="N"
-          >是否可选择退回节点</el-checkbox>
+          <el-checkbox v-model="CurrentNode.CanSelectBackToNode" true-label="Y" false-label="N">是否可选择退回节点</el-checkbox>
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="CurrentNode.CanBackIn" true-label="Y" false-label="N">是否退回节点</el-checkbox>
@@ -108,11 +96,7 @@
 
       <el-row>
         <el-form-item>
-          <el-checkbox
-            v-model="CurrentNode.MustHaveAttachment"
-            true-label="Y"
-            false-label="N"
-          >是否必须有附件</el-checkbox>
+          <el-checkbox v-model="CurrentNode.MustHaveAttachment" true-label="Y" false-label="N">是否必须有附件</el-checkbox>
         </el-form-item>
         <el-form-item>
           <el-checkbox v-model="CurrentNode.EditAttacher" true-label="Y" false-label="N">是否可修改附件</el-checkbox>
@@ -122,18 +106,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { inject } from 'vue';
+const CurrentNode = inject('CurrentNode');
 
-export default {
-  setup() {
-    const CurrentNode = inject('CurrentNode');
-    return {
-      CurrentNode,
-    };
-  },
-  data() {
-    return {};
-  },
-};
 </script>

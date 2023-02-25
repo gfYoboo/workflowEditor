@@ -1,7 +1,6 @@
-import { Shape } from '@antv/x6';
-export default class DutyDes extends Shape.Rect {
-}
-DutyDes.config({
+
+export default {
+  inherit: 'rect',
   width: 280,
   height: 70,
   attrs: {
@@ -25,4 +24,4 @@ DutyDes.config({
   data: {
     _disableMove: true,
   },
-});
+};

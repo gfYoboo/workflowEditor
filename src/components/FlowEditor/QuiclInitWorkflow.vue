@@ -13,12 +13,7 @@
           <el-row>
             <el-form-item label="部门">
               <el-select v-model="item.NoteName" clearable filterable>
-                <el-option
-                  v-for="opt in NoteList"
-                  :key="opt.ID"
-                  :value="opt.ID"
-                  :label="opt.NoteName"
-                ></el-option>
+                <el-option v-for="opt in NoteList" :key="opt.ID" :value="opt.ID" :label="opt.NoteName"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="节点名称">
@@ -34,38 +29,24 @@
   </div>
 </template>
 
-<script>
+<script setup>
 // 快速初始化新建流程的职能带节点
-import { mapState } from 'vuex';
-
-export default {
-  emits: ['init'],
-  data() {
-    return {
-      nodeList: [],
-    };
-  },
-  computed: {
-    ...mapState({
-      NoteList: (state) => state.NoteList,
-    }),
-  },
-  methods: {
-    handleAdd() {
-      this.nodeList.push({ NoteName: '', NodeName: '新节点_' + Math.floor((Math.random() * 1000) + 1) });
-    },
-    handleRemove(item) {
-      const index = this.nodeList.findIndex(a => a.NodeName === item.NodeName);
-      if (index > -1) {
-        this.nodeList.splice(index, 1);
-      }
-    },
-    handleInit() {
-      this.$emit('init', this.nodeList);
-    },
-  },
-};
-</script>
-
-<style>
-</style>
+import { useStore } from 'vuex';
+const emits = defineEmits(['init']);
+const nodeList = ref([]);
+const store = useStore();
+const NoteList = computed(() => {
+  return store.state.NoteList;
+});
+function handleAdd() {
+  nodeList.value.push({ NoteName: '', NodeName: '新节点_' + Math.floor((Math.random() * 1000) + 1) });
+}
+function handleRemove(item) {
+  const index = nodeList.value.findIndex(a => a.NodeName === item.NodeName);
+  if (index > -1) {
+    nodeList.value.splice(index, 1);
+  }
+}
+function handleInit() {
+  emits('init', nodeList.value);
+}

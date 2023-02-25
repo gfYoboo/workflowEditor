@@ -1,8 +1,6 @@
-import { Shape } from '@antv/x6';
-export default class ShapeImg extends Shape.Image {
 
-}
-ShapeImg.config({
+export default {
+  inherit: 'image',
   width: 80,
   height: 80,
   zIndex: 100,
@@ -17,4 +15,4 @@ ShapeImg.config({
   data: {
     _disableMove: true,
   },
-});
+};

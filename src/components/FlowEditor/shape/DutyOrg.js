@@ -1,7 +1,6 @@
-import { Shape } from '@antv/x6';
-export default class DutyOrg extends Shape.Rect {
-}
-DutyOrg.config({
+
+export default {
+  inherit: 'rect',
   width: 260,
   height: 70,
   attrs: {
@@ -20,4 +19,4 @@ DutyOrg.config({
   data: {
     _disableMove: true,
   },
-});
+};

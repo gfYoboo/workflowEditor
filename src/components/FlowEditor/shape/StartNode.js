@@ -1,8 +1,6 @@
-import { Shape } from '@antv/x6';
-export default class StartNode extends Shape.Polygon {
-}
 
-StartNode.config({
+export default {
+  inherit: 'polygon',
   width: 80,
   height: 36,
   zIndex: 100,
@@ -107,4 +105,4 @@ StartNode.config({
       },
     },
   },
-});
+};

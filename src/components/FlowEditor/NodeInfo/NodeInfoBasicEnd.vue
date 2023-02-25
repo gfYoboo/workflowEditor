@@ -20,21 +20,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { inject } from 'vue';
+const CurrentNode = inject('CurrentNode');
 
-export default {
-  setup() {
-    const CurrentNode = inject('CurrentNode');
-    return {
-      CurrentNode,
-    };
-  },
-  data() {
-    return {};
-  },
-  methods: {
-
-  },
-};
 </script>

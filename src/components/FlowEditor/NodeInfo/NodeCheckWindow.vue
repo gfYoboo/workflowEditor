@@ -2,13 +2,7 @@
   <div class="fr">
     <el-button type="success" @click="handleReset">重新设置</el-button>
   </div>
-  <el-table
-    :data="CheckWindowFactorList"
-    height="350"
-    border
-    style="width: 100%"
-    :row-class-name="tableRowClassName"
-  >
+  <el-table :data="CheckWindowFactorList" height="350" border style="width: 100%" :row-class-name="tableRowClassName">
     <el-table-column prop="WindowName" label="单据明细窗口" show-overflow-tooltip />
     <el-table-column label="是否可添加" width="90" align="center">
       <template #default="scope">
@@ -34,71 +28,56 @@
   </el-table>
 </template>
 
-<script>
+<script setup>
 import { GetCheckOperationPurviewList } from '@/api/workflow';
 import { inject } from 'vue';
+const CurrentNode = inject('CurrentNode');
+const manager = inject('manager');
+const CheckWindowFactorList = ref([]);
+onMounted(() => {
+  initCheckWindowFactor();
+});
 
-export default {
-  setup() {
-    const CurrentNode = inject('CurrentNode');
-    const manager = inject('manager');
-    return {
-      CurrentNode,
-      manager,
+function tableRowClassName({ row, rowIndex }) {
+  // 表单窗口的主表不受操作权限控制，由主表的审批要素决定是否可编辑
+  if (rowIndex === 0) {
+    return 'qyui-hide';
+  } else { return ''; }
+}
+async function initCheckWindowFactor(reset) {
+  CheckWindowFactorList.value.length = 0;
+  const list = await GetCheckOperationPurviewList(manager.CurrentSheetWindowName);
+  list.forEach(windowName => {
+    const item = {
+      WindowName: windowName,
+      AddAble: 'N',
+      DeleteAble: 'N',
+      EditAble: 'N',
+      MustHaveData: 'N',
     };
-  },
-  data() {
-    return {
-      CheckWindowFactorList: [],
-    };
-  },
-  mounted() {
-    this.initCheckWindowFactor();
-  },
-  methods: {
-    tableRowClassName({ row, rowIndex }) {
-      // 表单窗口的主表不受操作权限控制，由主表的审批要素决定是否可编辑
-      if (rowIndex === 0) {
-        return 'qyui-hide';
-      } else { return ''; }
-    },
-    async initCheckWindowFactor(reset) {
-      this.CheckWindowFactorList = [];
-      const list = await GetCheckOperationPurviewList(this.manager.CurrentSheetWindowName);
-      list.forEach(windowName => {
-        const item = {
-          WindowName: windowName,
-          AddAble: 'N',
-          DeleteAble: 'N',
-          EditAble: 'N',
-          MustHaveData: 'N',
-        };
-        if (this.CurrentNode.NodeType === 'Start') {
-          item.AddAble = 'Y';
-          item.DeleteAble = 'Y';
-          item.EditAble = 'Y';
-        }
+    if (CurrentNode.NodeType === 'Start') {
+      item.AddAble = 'Y';
+      item.DeleteAble = 'Y';
+      item.EditAble = 'Y';
+    }
 
-        if (!reset) {
-          // 判断是否有定义
-          const item2 = this.CurrentNode.CheckWindowFactorList.find(item => item.WindowName === windowName);
-          if (item2) {
-            item.AddAble = item2.AddAble;
-            item.EditAble = item2.EditAble;
-            item.DeleteAble = item2.DeleteAble;
-            item.MustHaveData = item2.MustHaveData;
-          }
-        }
-        this.CheckWindowFactorList.push(item);
-      });
-    },
-    handleReset() {
-      this.initCheckWindowFactor(true);
-    },
-  },
+    if (!reset) {
+      // 判断是否有定义
+      const item2 = CurrentNode.CheckWindowFactorList.find(item => item.WindowName === windowName);
+      if (item2) {
+        item.AddAble = item2.AddAble;
+        item.EditAble = item2.EditAble;
+        item.DeleteAble = item2.DeleteAble;
+        item.MustHaveData = item2.MustHaveData;
+      }
+    }
+    CheckWindowFactorList.value.push(item);
+  });
+}
+function handleReset() {
+  initCheckWindowFactor(true);
+}
 
-};
 </script>
 
-<style>
-</style>
+<style></style>

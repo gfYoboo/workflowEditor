@@ -1,8 +1,6 @@
 
-import { Shape } from '@antv/x6';
-export default class ShapeText extends Shape.Rect {
-}
-ShapeText.config({
+export default {
+  inherit: 'rect',
   width: 80,
   height: 40,
   zIndex: 100,
@@ -25,4 +23,4 @@ ShapeText.config({
     _disableMove: true,
   },
 
-});
+};

@@ -29,10 +29,7 @@
       <div class="qyui-cell" style="width: 120px">
         <div id="stencilContainer" style="position: relative; height: 100%; width: 100%"></div>
       </div>
-      <div
-        class="qyui-cell row"
-        style="background: #88acda;padding: 20px 0;align-items: center;overflow: auto;"
-      >
+      <div class="qyui-cell row" style="background: #88acda;padding: 20px 0;align-items: center;overflow: auto;">
         <div style="background: #ffffff; padding: 20px; border: 1px solid #888888">
           <div id="container"></div>
         </div>
@@ -102,7 +99,7 @@ onMounted(async () => {
   // 注册节点
   registerNode();
   // 初始化画布
-  const graphObj = createGraph('container', 'stencilContainer');
+  const graphObj = createGraph('container', 'stencilContainer', manager);
   graph.value = graphObj;
   // 注册工具
   // registerTool();
@@ -193,7 +190,7 @@ async function handleSave() {
         // 边全部删除 重新创建
         const sourceId = graph.value.getCellById(cell.source.cell).getData().DBID;
         const targetId = graph.value.getCellById(cell.target.cell).getData().DBID;
-        let PointList = getPointByPort(cell.source.port) + ';' + this.getPointByPort(cell.target.port) + ';';
+        let PointList = getPointByPort(cell.source.port) + ';' + getPointByPort(cell.target.port) + ';';
         if (cell.vertices.length === 0) {
           PointList += '0,0;';
         } else {
@@ -218,8 +215,8 @@ async function handleSave() {
     // 开始节点 节点 结束节点的处理
     if (
       cell.shape === 'start' ||
-          cell.shape === 'normal' ||
-          cell.shape === 'end'
+      cell.shape === 'normal' ||
+      cell.shape === 'end'
     ) {
       const data = cell.getData();
       const pos = cell.position();

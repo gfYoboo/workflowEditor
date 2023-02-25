@@ -1,8 +1,6 @@
 
-import { Shape } from '@antv/x6';
-export default class NormalNode extends Shape.Rect {
-}
-NormalNode.config({
+export default {
+  inherit: 'rect',
   width: 80,
   height: 34,
   zIndex: 100,
@@ -98,4 +96,4 @@ NormalNode.config({
       },
     },
   },
-});
+};

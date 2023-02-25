@@ -1,11 +1,5 @@
 <template>
-  <el-dialog
-    v-model="showDlg"
-    title="节点用户描述维护"
-    width="700px"
-    :close-on-click-modal="false"
-    destroy-on-close
-  >
+  <el-dialog v-model="showDlg" title="节点用户描述维护" width="700px" :close-on-click-modal="false" destroy-on-close>
     <div style="height:400px">
       <div class="qyui-cell row qyui-container">
         <div class="qyui-cell" style="height:40px">
@@ -18,10 +12,7 @@
           <div class="qyui-cell row">
             <ul class="qyui-ul bd">
               <template v-for="item in manager.NodeUserDesList" :key="item.ID">
-                <li
-                  :class="{ current: item.ID === currentItem.ID }"
-                  @click="handleSelect(item)"
-                >{{ item.Name }}</li>
+                <li :class="{ current: item.ID === currentItem.ID }" @click="handleSelect(item)">{{ item.Name }}</li>
               </template>
             </ul>
           </div>
@@ -50,69 +41,57 @@
     </div>
   </el-dialog>
 </template>
-<script>
+<script setup>
 import { SaveNodeUserDes, RemoveNodeUserDes } from '@/api/workflow';
+import { ElMessage } from 'element-plus';
 import { inject } from 'vue';
-export default {
-  setup() {
-    const manager = inject('manager');
-    return {
-      manager,
-    };
+const manager = inject('manager');
+const data = reactive({
+  currentItem: {},
+  formData: {
+    ID: '',
+    NoteCode: '',
+    NoteName: '',
   },
-  data() {
-    return {
-      currentItem: {},
-      formData: {
-        ID: '',
-        NoteCode: '',
-        NoteName: '',
-      },
-    };
+});
+let showDlg = computed({
+  set(val) {
+    manager.states.ShowNodeUserDesDlg = val;
   },
-  computed: {
+  get() {
+    return manager.states.ShowNodeUserDesDlg;
+  },
+});
 
-    showDlg: {
-      get() {
-        return this.manager.states.ShowNodeUserDesDlg;
-      },
-      set(data) {
-        this.manager.states.ShowNodeUserDesDlg = data;
-      },
-    },
-  },
-  methods: {
-    handleSelect(item) {
-      this.currentItem = item;
-      this.formData = JSON.parse(JSON.stringify(item));
-    },
-    handleAdd() {
-      this.formData = {
+function handleSelect(item) {
+  data.currentItem = item;
+  data.formData = JSON.parse(JSON.stringify(item));
+}
+function handleAdd() {
+  data.formData = {
+    ID: '',
+    Code: '',
+    Name: '',
+  };
+}
+function handleSave() {
+  SaveNodeUserDes(data.formData).then(res => {
+    ElMessage({ type: 'success', message: '保存成功' });
+    manager.SetNodeUserDes(res.Result);
+  });
+}
+function handleDelete() {
+  if (data.formData.ID) {
+    RemoveNodeUserDes({ ID: data.formData.ID }).then(res => {
+      ElMessage({ type: 'success', message: '删除成功' });
+      manager.SetNodeUserDes(res.Result);
+
+      data.formData = {
         ID: '',
         Code: '',
         Name: '',
       };
-    },
-    handleSave() {
-      SaveNodeUserDes(this.formData).then(res => {
-        this.$message({ type: 'success', message: '保存成功' });
-        this.manager.SetNodeUserDes(res.Result);
-      });
-    },
-    handleDelete() {
-      if (this.formData.ID) {
-        RemoveNodeUserDes({ ID: this.formData.ID }).then(res => {
-          this.$message({ type: 'success', message: '删除成功' });
-          this.manager.SetNodeUserDes(res.Result);
-
-          this.formData = {
-            ID: '',
-            Code: '',
-            Name: '',
-          };
-        });
-      }
-    },
-  },
-};
+    });
+  }
+}
 </script>

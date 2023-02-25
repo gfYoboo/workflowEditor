@@ -123,5 +123,8 @@ module.exports = {
     computed: 'readonly',
     onMounted: 'readonly',
     onBeforeUnmount: 'readonly',
+    defineEmits: 'readonly',
+    nextTick: 'readonly',
+    defineProps: 'readonly',
   },
 };

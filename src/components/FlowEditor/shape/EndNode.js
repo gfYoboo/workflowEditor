@@ -1,7 +1,6 @@
-import { Shape } from '@antv/x6';
-export default class EndNode extends Shape.Rect {
-}
-EndNode.config({
+
+export default {
+  inherit: 'rect',
   width: 80,
   height: 36,
   zIndex: 100,
@@ -100,4 +99,4 @@ EndNode.config({
       },
     },
   },
-});
+};

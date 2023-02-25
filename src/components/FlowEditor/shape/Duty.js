@@ -1,7 +1,6 @@
-import { Shape } from '@antv/x6';
-export default class Duty extends Shape.Polygon {
-}
-Duty.config({
+
+export default {
+  inherit: 'polygon',
   width: 910,
   height: 70,
   zIndex: 0,
@@ -32,4 +31,4 @@ Duty.config({
     DBID: '',
     NoteName: '',
   },
-});
+};

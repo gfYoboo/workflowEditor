@@ -22,56 +22,43 @@
   </el-table>
 </template>
 
-<script>
+<script setup>
 import { inject } from 'vue';
 
 import { GetCheckFactorList } from '@/api/workflow';
-export default {
-  setup() {
-    const CurrentNode = inject('CurrentNode');
-    const manager = inject('manager');
+const CurrentNode = inject('CurrentNode');
+const manager = inject('manager');
 
-    return {
-      CurrentNode,
-      manager,
-    };
-  },
-  data() {
-    return {
-      CheckFactorList: [],
-    };
-  },
+const CheckFactorList = ref([]);
 
-  mounted() {
-    this.initCheckFactor();
-  },
-  methods: {
-    async initCheckFactor() {
-      this.CheckFactorList = [];
-      const list = await GetCheckFactorList(this.manager.CurrentSheetWindowName);
-      list.forEach(dispunit => {
-        const item = {
-          DispUnit: dispunit,
-          CanEdit: 'N',
-          NotNullable: 'N',
-          IsHidden: 'N',
-        };
-        // 判断是否有定义
-        const item2 = this.CurrentNode.CheckFactorList.find(item => item.DispUnit === dispunit);
-        if (item2) {
-          item.CanEdit = item2.CanEdit;
-          item.NotNullable = item2.NotNullable;
-          item.IsHidden = item2.IsHidden;
-        }
-        this.CheckFactorList.push(item);
-      });
-    },
-    handleReset() {
-      this.initCheckFactor();
-    },
-  },
-};
+onMounted(() => {
+  initCheckFactor();
+});
+
+async function initCheckFactor() {
+  CheckFactorList.value.length = 0;
+  const list = await GetCheckFactorList(manager.CurrentSheetWindowName);
+  list.forEach(dispunit => {
+    const item = {
+      DispUnit: dispunit,
+      CanEdit: 'N',
+      NotNullable: 'N',
+      IsHidden: 'N',
+    };
+    // 判断是否有定义
+    const item2 = CurrentNode.CheckFactorList.find(item => item.DispUnit === dispunit);
+    if (item2) {
+      item.CanEdit = item2.CanEdit;
+      item.NotNullable = item2.NotNullable;
+      item.IsHidden = item2.IsHidden;
+    }
+    CheckFactorList.value.push(item);
+  });
+}
+function handleReset() {
+  initCheckFactor();
+}
+
 </script>
 
-<style>
-</style>
+<style></style>

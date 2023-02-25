@@ -113,7 +113,7 @@ export default (graph, manager) => {
       source: { cell: getNodeByDBID(graph, cond.NodeFrom_XID), port: GetProtID(points[0]) },
       target: { cell: getNodeByDBID(graph, cond.NodeTo_XID), port: GetProtID(points[1]) },
       data: cond,
-      vertices: vertices,
+      // vertices: vertices,
     });
   });
 };

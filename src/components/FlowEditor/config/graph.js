@@ -6,7 +6,7 @@ import useKeyboard from '../plugin/useKeyboard.js';
 import useSelecting from '../plugin/useSelecting.js';
 import useStencil from '../plugin/useStencil.js';
 
-export default function createGraph(id, stencilConId) {
+export default function createGraph(id, stencilConId, manager) {
   // 初始化画布
   const graphObj = new Graph({
     container: document.getElementById(id),
@@ -43,7 +43,7 @@ export default function createGraph(id, stencilConId) {
         }
       },
     },
-    connecting: { ...connecting },
+    connecting: connecting(manager),
     highlighting: { ...highlighting },
 
   });

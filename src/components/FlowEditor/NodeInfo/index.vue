@@ -1,12 +1,5 @@
 <template>
-  <el-dialog
-    v-model="showDlg"
-    width="800px"
-    title="节点属性"
-    :close-on-click-modal="false"
-    destroy-on-close
-    @open="openDlg"
-  >
+  <el-dialog v-model="showDlg" width="800px" title="节点属性" :close-on-click-modal="false" destroy-on-close @open="openDlg">
     <el-tabs type="border-card">
       <el-tab-pane label="基本设置">
         <nodeInfoBasicStart v-if="CurrentNode.NodeType === 'Start'" />
@@ -33,7 +26,7 @@
   </el-dialog>
 </template>
 
-<script>
+<script setup>
 import NodeInfoBasic from './NodeInfoBasic.vue';
 import NodeInfoBasicStart from './NodeInfoBasicStart.vue';
 import NodeInfoBasicEnd from './NodeInfoBasicEnd.vue';
@@ -42,143 +35,118 @@ import NodeUser from './NodeUser/index.vue';
 import NodeCheckFactor from './NodeCheckFactor.vue';
 import NodeCheckWindow from './NodeCheckWindow.vue';
 import NodeExt from './NodeExt.vue';
-import { inject, computed } from 'vue';
+import { inject, computed, reactive } from 'vue';
+const graph = inject('graph');
+const manager = inject('manager');
+const CheckFactor = ref();
+const CheckWindow = ref();
 
-export default {
-  components: {
-    NodeInfoBasic,
-    NodeInfoBasicStart,
-    NodeInfoBasicEnd,
-    NodeUser,
-    NodeCheckFactor,
-    NodeCheckWindow,
-    NodeExt,
+const data = reactive({
+  CurrentNode: {
+    DBID: '',
+    AllowEditDocument: 'N',
+    AllowPrintDocument: 'N',
+    AllowUnCheck: 'N',
+    AppointCheckerExpression: '',
+    AppointUser: '',
+    AppointUserID: '',
+    AutoCheckOwnDoc: 'N',
+    CanAutoCheck: 'N',
+    CanBackIn: 'N',
+    CanReverse: 'N',
+    CanSelectBackToNode: 'N',
+    CheckFactorList: [],
+    CheckWindowFactorList: [],
+    DutyDes: '',
+    EditAttacher: 'N',
+    ExecutiveAfter: '',
+    GroupIndex: '1',
+    IsAssign: 'N',
+    IsAutoNode: 'N',
+    IsNeedCA: 'N',
+    MaxStayTime: '',
+    MustHaveAttachment: 'N',
+    NodeCode: '',
+    NodeUserList: [],
+    NodeX: '',
+    NodeY: '',
+    OnlyDepartmentManager: 'N',
+    ProcedureAfter: '',
+    ProcedureAfterBack: '',
+    ProcedureAfterReject: '',
+    ProcedureBackIn: '',
+    ProcedureBeforeBack: '',
+    ProcedureBeforeReject: '',
+    ProcedureInNode: '',
+    ProcedureName: '',
+    ProcessVoucher: '',
+    SubWorkFlowID: '',
+    SubWorkFlowName: '',
+    TicketQty: '0',
+    TitleDescription: '',
+    DocStatus: '',
+    NodeName: '',
+    NodeType: '',
+    ProcessName: '',
   },
-  provide() {
-    return {
-      CurrentNode: computed(() => this.CurrentNode),
-    };
+});
+provide('CurrentNode', computed(() => data.CurrentNode));
+
+const showDlg = computed({
+  get() {
+    return manager.node.ShowNodeInfoDlg;
   },
-  setup() {
-    const graph = inject('graph');
-    const manager = inject('manager');
-    return {
-      graph,
-      manager,
-    };
+  set(data) {
+    manager.node.ShowNodeInfoDlg = data;
   },
-  data() {
-    return {
-      CurrentNode: {
-        DBID: '',
-        AllowEditDocument: 'N',
-        AllowPrintDocument: 'N',
-        AllowUnCheck: 'N',
-        AppointCheckerExpression: '',
-        AppointUser: '',
-        AppointUserID: '',
-        AutoCheckOwnDoc: 'N',
-        CanAutoCheck: 'N',
-        CanBackIn: 'N',
-        CanReverse: 'N',
-        CanSelectBackToNode: 'N',
-        CheckFactorList: [],
-        CheckWindowFactorList: [],
-        DutyDes: '',
-        EditAttacher: 'N',
-        ExecutiveAfter: '',
-        GroupIndex: '1',
-        IsAssign: 'N',
-        IsAutoNode: 'N',
-        IsNeedCA: 'N',
-        MaxStayTime: '',
-        MustHaveAttachment: 'N',
-        NodeCode: '',
-        NodeUserList: [],
-        NodeX: '',
-        NodeY: '',
-        OnlyDepartmentManager: 'N',
-        ProcedureAfter: '',
-        ProcedureAfterBack: '',
-        ProcedureAfterReject: '',
-        ProcedureBackIn: '',
-        ProcedureBeforeBack: '',
-        ProcedureBeforeReject: '',
-        ProcedureInNode: '',
-        ProcedureName: '',
-        ProcessVoucher: '',
-        SubWorkFlowID: '',
-        SubWorkFlowName: '',
-        TicketQty: '0',
-        TitleDescription: '',
-        DocStatus: '',
-        NodeName: '',
-        NodeType: '',
-        ProcessName: '',
-      },
-    };
-  },
+});
 
-  computed: {
-    showDlg: {
-      get() {
-        return this.manager.node.ShowNodeInfoDlg;
-      },
-      set(data) {
-        this.manager.node.ShowNodeInfoDlg = data;
-      },
-    },
-  },
-  methods: {
-    openDlg() {
-      const cell = this.manager.CurrentCell;
-      this.CurrentNode = JSON.parse(JSON.stringify(cell.getData()));
-    },
-    handleConfirm() {
-      // 重新组织审批要素 默认值的不需要保存到数据库
-      const CheckFactorList = this.$refs.CheckFactor?.CheckFactorList || [];
-      const newList = CheckFactorList.filter(a => {
-        return a.CanEdit === 'Y' || a.NotNullable === 'Y' || a.IsHidden === 'Y';
-      });
-      this.CurrentNode.CheckFactorList = newList;
+function openDlg() {
+  const cell = manager.CurrentCell;
+  data.CurrentNode = JSON.parse(JSON.stringify(cell.getData()));
+}
+function handleConfirm() {
+  // 重新组织审批要素 默认值的不需要保存到数据库
+  const CheckFactorList = CheckFactor.value?.CheckFactorList || [];
+  const newList = CheckFactorList.filter(a => {
+    return a.CanEdit === 'Y' || a.NotNullable === 'Y' || a.IsHidden === 'Y';
+  });
+  data.CurrentNode.CheckFactorList = newList;
 
-      // 判断审批要素中有的元素 给对应的窗口设置成 可编辑
-      const EditWindow = [];
-      newList.forEach(item => {
-        if (item.CanEdit === 'Y') {
-          const windowName = item.DispUnit.split('-')[0];
-          if (EditWindow.indexOf(windowName) === -1) {
-            EditWindow.push(windowName);
-          }
-        }
-      });
-      const CheckWindowFactorList = this.$refs.CheckWindow?.CheckWindowFactorList || [];
-      CheckWindowFactorList.forEach(item => {
-        if (EditWindow.indexOf(item.WindowName) > -1) {
-          item.EditAble = 'Y';
-        }
-      });
-      const newList2 = CheckWindowFactorList.filter(a => {
-        return a.AddAble === 'Y' || a.EditAble === 'Y' || a.DeleteAble === 'Y' || a.MustHaveData === 'Y';
-      });
-
-      this.CurrentNode.CheckWindowFactorList = newList2;
-
-      this.manager.CurrentCell.updateData(this.CurrentNode);
-      this.showDlg = false;
-
-      if (this.manager.CurrentCell.shape === 'normal') {
-        this.manager.CurrentCell.label = this.CurrentNode.NodeName;
+  // 判断审批要素中有的元素 给对应的窗口设置成 可编辑
+  const EditWindow = [];
+  newList.forEach(item => {
+    if (item.CanEdit === 'Y') {
+      const windowName = item.DispUnit.split('-')[0];
+      if (EditWindow.indexOf(windowName) === -1) {
+        EditWindow.push(windowName);
       }
-      this.showDlg = false;
-    },
-    handleCancel() {
-      this.showDlg = false;
-    },
+    }
+  });
+  const CheckWindowFactorList = CheckWindow.value?.CheckWindowFactorList || [];
+  CheckWindowFactorList.forEach(item => {
+    if (EditWindow.indexOf(item.WindowName) > -1) {
+      item.EditAble = 'Y';
+    }
+  });
+  const newList2 = CheckWindowFactorList.filter(a => {
+    return a.AddAble === 'Y' || a.EditAble === 'Y' || a.DeleteAble === 'Y' || a.MustHaveData === 'Y';
+  });
 
-  },
-};
+  data.CurrentNode.CheckWindowFactorList = newList2;
+
+  manager.CurrentCell.updateData(data.CurrentNode);
+  showDlg.value = false;
+
+  if (manager.CurrentCell.shape === 'normal') {
+    manager.CurrentCell.label = data.CurrentNode.NodeName;
+  }
+  showDlg.value = false;
+}
+function handleCancel() {
+  showDlg.value = false;
+}
+
 </script>
 
-<style>
-</style>
+<style></style>
