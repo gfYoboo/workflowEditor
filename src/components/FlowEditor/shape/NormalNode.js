@@ -16,10 +16,10 @@ export default {
       fontSize: 12,
       textAnchor: 'middle',
       textVerticalAnchor: 'middle',
-    },
-    text: {
       textWrap: {
-        width: -10,
+        ellipsis: true,
+        width: -5,
+        height: '125%',
       },
     },
   },
