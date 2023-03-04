@@ -23,7 +23,7 @@ const props = defineProps({
 const emits = defineEmits(['select']);
 
 const showValue = computed(() => {
-  return CurrentNode[props.field].replace(/;/gm, '\n');
+  return CurrentNode.value[props.field].replace(/;/gm, '\n');
 });
 function showTransferDialog() {
   emits('select');

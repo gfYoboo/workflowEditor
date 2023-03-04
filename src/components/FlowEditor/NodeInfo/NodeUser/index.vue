@@ -88,10 +88,10 @@ function delNodeUser(obj) {
       type: 'warning',
     },
   ).then(() => {
-    const index = CurrentNode.NodeUserList.findIndex(
+    const index = CurrentNode.value.NodeUserList.findIndex(
       (u) => u.UserCode === obj.UserCode,
     );
-    CurrentNode.NodeUserList.splice(index, 1);
+    CurrentNode.value.NodeUserList.splice(index, 1);
     ElMessage({
       type: 'success',
       message: '删除成功!',
@@ -107,26 +107,26 @@ function delNodeUser(obj) {
 function saveNodeUser(data) {
   // 判断是编辑还是新增
   // 根据ID去找 记录
-  const index = CurrentNode.NodeUserList.findIndex(
+  const index = CurrentNode.value.NodeUserList.findIndex(
     (d) => d.ID === data.ID,
   );
   if (index > -1) {
-    CurrentNode.NodeUserList[index] = data;
+    CurrentNode.value.NodeUserList[index] = data;
   } else {
     // 再判断是否已经存在
-    const index2 = CurrentNode.NodeUserList.findIndex(
+    const index2 = CurrentNode.value.NodeUserList.findIndex(
       (d) => d.UserCode === data.UserCode,
     );
     if (index2 > -1) {
       ElMessage.error(`已存在【${data.UserName}】，不可重复添加！`);
     } else {
-      CurrentNode.NodeUserList.push(data);
+      CurrentNode.value.NodeUserList.push(data);
     }
   }
 }
 function showExpDialog() {
   manager.EditExp({
-    Expression: CurrentNode.AppointCheckerExpression,
+    Expression: CurrentNode.value.AppointCheckerExpression,
     PsmExpression: '',
     ParameterXml: '',
     ResultType: 'String',
@@ -134,7 +134,7 @@ function showExpDialog() {
   });
 }
 function callbackExp(data) {
-  CurrentNode.AppointCheckerExpression = data.Expression;
+  CurrentNode.value.AppointCheckerExpression = data.Expression;
 }
 
 </script>

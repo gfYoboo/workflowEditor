@@ -12,17 +12,17 @@
           <div class="qyui-cell row">
             <ul class="qyui-ul bd">
               <template v-for="item in manager.NodeUserDesList" :key="item.ID">
-                <li :class="{ current: item.ID === currentItem.ID }" @click="handleSelect(item)">{{ item.Name }}</li>
+                <li :class="{ current: item.ID === data.currentItem.ID }" @click="handleSelect(item)">{{ item.Name }}</li>
               </template>
             </ul>
           </div>
           <div class="qyui-cell row pd4">
-            <el-form :model="formData" label-position="top">
+            <el-form :model="data.formData" label-position="top">
               <el-form-item label="编码" prop="Code" :rules="[{ required: true, message: '请输入编码' }]">
-                <el-input v-model="formData.Code" clearable placeholder="请输入编码"></el-input>
+                <el-input v-model="data.formData.Code" clearable placeholder="请输入编码"></el-input>
               </el-form-item>
               <el-form-item label="名称" prop="Name" :rules="[{ required: true, message: '请输入名称' }]">
-                <el-input v-model="formData.Name" clearable placeholder="请输入名称"></el-input>
+                <el-input v-model="data.formData.Name" clearable placeholder="请输入名称"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="success" @click="handleSave">保存</el-button>

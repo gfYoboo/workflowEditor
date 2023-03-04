@@ -1,7 +1,7 @@
 
 export default (store) => {
   return {
-  // 是否允许连接到画布空白位置的点
+    // 是否允许连接到画布空白位置的点
     allowBlank: false,
     // 是否允许创建循环连线
     allowLoop: false,
@@ -24,17 +24,17 @@ export default (store) => {
     router: {
       name: 'manhattan', // orth
       args: {
-      // 路由算法步进步长，其值越小计算量越大。推荐使用画布的网格大小
+        // 路由算法步进步长，其值越小计算量越大。推荐使用画布的网格大小
         step: 5,
         // 设置锚点距离转角的最小距离，和 orth 路由配置一致。20
         padding: 5,
         // 忽略起始或终止节点，忽略后不参与障碍物计算。
         // excludeTerminals: ['source', 'target'], // 'target' source
         // 排除职能带 部门 描述
-        // excludeShapes: ['duty', 'dutyorg', 'dutydes'],
-        excludeNodes() {
-          return store.dutyCellIds;
-        },
+        excludeShapes: ['duty', 'dutyorg', 'dutydes'],
+        // excludeNodes() {
+        //   return store.dutyCellIds;
+        // },
         // 忽略隐藏的节点，忽略后不参与障碍物计算。
         excludeHiddenNodes: true,
       },

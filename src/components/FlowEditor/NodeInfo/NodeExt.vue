@@ -25,10 +25,10 @@
       <nodeExtInput label="客户端处理功能(提交、审批后)" field="ExecutiveAfter" @select="PopSelectClient('ExecutiveAfter')" />
     </el-row>
   </el-form>
-  <el-dialog v-model="showDlg" title="处理功能">
+  <el-dialog v-model="data.showDlg" title="处理功能">
     <div class="qyui-cell col qyui-container" style="height:500px">
       <div class="qyui-cell row bdr" style="overflow: auto;">
-        <el-tree :data="treeList" highlight-current accordion @currentChange="currentTreeChange" />
+        <el-tree :data="data.treeList" highlight-current accordion @currentChange="currentTreeChange" />
       </div>
       <div class="qyui-cell" style="width:80px">
         <div class="qyui-cell row">
@@ -48,8 +48,8 @@
       </div>
       <div class="qyui-cell row bdl">
         <ul class="qyui-ul">
-          <template v-for="item in list" :key="item">
-            <li :class="{ current: item === currentItem }" @click="handleClick(item)">{{ item }}</li>
+          <template v-for="item in data.list" :key="item">
+            <li :class="{ current: item === data.currentItem }" @click="handleClick(item)">{{ item }}</li>
           </template>
         </ul>
       </div>
@@ -92,8 +92,8 @@ function PopSelect(fieldName) {
     }
     data.treeList.push(item);
   }
-  if (CurrentNode[fieldName]) {
-    data.list = CurrentNode[fieldName].split(';');
+  if (CurrentNode.value[fieldName]) {
+    data.list = CurrentNode.value[fieldName].split(';');
   } else {
     data.list = [];
   }
@@ -109,8 +109,8 @@ function PopSelectClient(fieldName) {
     }
     data.treeList.push(item);
   }
-  if (CurrentNode[fieldName]) {
-    data.list = CurrentNode[fieldName].split(';');
+  if (CurrentNode.value[fieldName]) {
+    data.list = CurrentNode.value[fieldName].split(';');
   } else {
     data.list = [];
   }
@@ -132,7 +132,7 @@ function handleDelete() {
   }
 }
 function handleConfirm() {
-  CurrentNode[data.currentFieldName] = data.list.join(';');
+  CurrentNode.value[data.currentFieldName] = data.list.join(';');
   data.showDlg = false;
 }
 function handleCancel() {

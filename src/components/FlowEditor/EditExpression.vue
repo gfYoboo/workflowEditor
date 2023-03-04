@@ -3,48 +3,50 @@
     @open="dlgOpen">
     <div class="qyui-cell row qyui-container">
       <div class="qyui-cell">
-        <el-input ref="exp" v-model="Expression" type="textarea" :rows="5" placeholder @change="handleChange" />
+        <el-input ref="exp" v-model="data.Expression" type="textarea" :rows="5" placeholder @change="handleChange" />
       </div>
       <div class="qyui-cell pd4">
         <el-button-group>
-          <el-button v-for="item in OperatorList" :key="item.Name" @click="insertText(item.Name)">{{ item.Name
+          <el-button v-for="item in data.OperatorList" :key="item.Name" @click="insertText(item.Name)">{{ item.Name
           }}</el-button>
         </el-button-group>
       </div>
       <div class="qyui-cell" style="height: 300px">
         <div class="qyui-cell col">
           <div class="qyui-cell row bd pd4">
-            <el-tabs v-model="activeTabName" class="exp_tab" type="border-card" tab-position="left" style="height: 100%">
+            <el-tabs v-model="data.activeTabName" class="exp_tab" type="border-card" tab-position="left"
+              style="height: 100%">
               <el-tab-pane name="data" label="数据集" style="height: 100%; overflow: auto">
 
-                <el-tree :data="dataTreeData" node-key="title" :expand-on-click-node="false" default-expand-all
+                <el-tree :data="data.dataTreeData" node-key="title" :expand-on-click-node="false" default-expand-all
                   highlight-current @node-click="handleNodeClick" />
 
               </el-tab-pane>
               <el-tab-pane name="func" label="函数">
-                <el-tree :data="funcTreeData" node-key="id" default-expand-all highlight-current
+                <el-tree :data="data.funcTreeData" node-key="id" default-expand-all highlight-current
                   @node-click="handleFuncNodeClick" />
               </el-tab-pane>
               <el-tab-pane name="param" label="参数">
-                <el-tree :data="ParamTreeData" node-key="title" :props="paramProps" default-expand-all highlight-current
-                  @node-click="handleNodeClick" />
+                <el-tree :data="data.ParamTreeData" node-key="title" :props="data.paramProps" default-expand-all
+                  highlight-current @node-click="handleNodeClick" />
               </el-tab-pane>
             </el-tabs>
           </div>
           <div class="qyui-cell row bd pd4">
-            <div v-if="activeTabName !== 'data'" class="qyui-cell row bdb">
+            <div v-if="data.activeTabName !== 'data'" class="qyui-cell row bdb">
               <ul class="qyui-ul">
-                <li v-for="item in FuncList" :key="item.Name" :class="{ current: currentItem.Name === item.Name }"
-                  @click="handleFuncClick(item)" @dblclick="handleFuncDbClick(item)">{{ item.Name }}</li>
+                <li v-for="item in data.FuncList" :key="item.Name"
+                  :class="{ current: data.currentItem.Name === item.Name }" @click="handleFuncClick(item)"
+                  @dblclick="handleFuncDbClick(item)">{{ item.Name }}</li>
               </ul>
             </div>
             <div class="qyui-cell row">
-              <div style="height: 100%; overflow: auto" v-html="desc"></div>
+              <div style="height: 100%; overflow: auto" v-html="data.desc"></div>
             </div>
           </div>
         </div>
         <div class="qyui-cell" style="width: 30%">
-          <el-table :data="errorsList">
+          <el-table :data="data.errorsList">
             <el-table-column type="index" label="序号" width="60px" />
             <el-table-column label="信息" prop="text" />
           </el-table>
@@ -217,6 +219,7 @@ async function GetSheetWindowMainCardModel() {
   }
 }
 function insertText(text) {
+  console.log('exp.value', exp.value);
   const textarea = exp.value.$refs.textarea;
   if (textarea.selectionStart || textarea.selectionStart === 0) {
     const startPos = textarea.selectionStart;
@@ -239,28 +242,28 @@ function insertText(text) {
 function handleChange() {
   data.Changed = true;
 }
-function handleNodeClick(data, node) {
+function handleNodeClick(nodeData, node) {
   data.treeClickCount++;
   data.timer = window.setTimeout(() => {
     if (data.treeClickCount === 1) {
       // 把次数归零
       data.treeClickCount = 0;
       // 单击事件处理
-      let dataCollDescHtml = '<dt>' + data.title + '</dt>';
-      if (data.type) {
-        dataCollDescHtml += '<dt>类型：' + data.type + '</dt>';
+      let dataCollDescHtml = '<dt>' + nodeData.title + '</dt>';
+      if (nodeData.type) {
+        dataCollDescHtml += '<dt>类型：' + nodeData.type + '</dt>';
       }
       if (data.desc) {
-        dataCollDescHtml += '<dt>描述：' + data.desc + '</dt>';
+        dataCollDescHtml += '<dt>描述：' + nodeData.desc + '</dt>';
       }
       data.desc = dataCollDescHtml;
     } else if (data.treeClickCount > 1) {
       // 把次数归零
       data.treeClickCount = 0;
-      if (data.children && data.children.length > 0) {
+      if (nodeData.children && nodeData.children.length > 0) {
         return false;
       } else {
-        insertText(data.title);
+        insertText(nodeData.title);
       }
     }
   }, 300);

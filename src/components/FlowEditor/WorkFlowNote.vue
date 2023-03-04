@@ -5,17 +5,18 @@
         <div class="qyui-cell row">
           <ul class="qyui-ul bd">
             <template v-for="item in manager.NoteList" :key="item.ID">
-              <li :class="{ current: item.ID === currentItem.ID }" @click="handleSelect(item)">{{ item.NoteName }}</li>
+              <li :class="{ current: item.ID === data.currentItem.ID }" @click="handleSelect(item)">{{ item.NoteName }}
+              </li>
             </template>
           </ul>
         </div>
         <div class="qyui-cell row pd4">
-          <el-form :model="formData" label-position="top">
+          <el-form :model="data.formData" label-position="top">
             <el-form-item label="职能带编码" prop="NoteCode" :rules="[{ required: true, message: '请输入职能带编码' }]">
-              <el-input v-model="formData.NoteCode" clearable placeholder="请输入职能带编码"></el-input>
+              <el-input v-model="data.formData.NoteCode" clearable placeholder="请输入职能带编码"></el-input>
             </el-form-item>
             <el-form-item label="职能带名称" prop="NoteName" :rules="[{ required: true, message: '请输入职能带名称' }]">
-              <el-input v-model="formData.NoteName" clearable placeholder="请输入职能带名称"></el-input>
+              <el-input v-model="data.formData.NoteName" clearable placeholder="请输入职能带名称"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="handleAdd">新增</el-button>

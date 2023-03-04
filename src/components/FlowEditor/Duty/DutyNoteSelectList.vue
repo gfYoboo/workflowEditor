@@ -5,7 +5,7 @@
         <div class="qyui-cell row">
           <ul class="qyui-ul bd">
             <template v-for="item in manager.NoteList" :key="item.ID">
-              <li :class="{ current: item.ID === currentItem?.ID }" @click="handleSelect(item)"
+              <li :class="{ current: item.ID === data.currentItem?.ID }" @click="handleSelect(item)"
                 @dblclick="handleDbClick(item)">{{ item.NoteName }}</li>
             </template>
           </ul>

@@ -2,10 +2,10 @@
   <el-dialog v-model="showDlg" width="500px" title="边属性" :close-on-click-modal="false" destroy-on-close @open="openDlg">
     <el-form label-position="top" label-width="85px">
       <el-form-item label="描述">
-        <el-input v-model="CurrentEdge.Description" type="textarea" :rows="2" resize="none" />
+        <el-input v-model="data.CurrentEdge.Description" type="textarea" :rows="2" resize="none" />
       </el-form-item>
       <el-form-item label="逻辑表达式">
-        <el-input v-model="CurrentEdge.ConditionPIM" :readonly="true" type="textarea" :rows="3" resize="none" />
+        <el-input v-model="data.CurrentEdge.ConditionPIM" :readonly="true" type="textarea" :rows="3" resize="none" />
       </el-form-item>
       <el-form-item>
         <el-button @click="handleEdit">编辑表达式</el-button>

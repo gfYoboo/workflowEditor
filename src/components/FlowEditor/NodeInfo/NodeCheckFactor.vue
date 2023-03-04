@@ -46,7 +46,7 @@ async function initCheckFactor() {
       IsHidden: 'N',
     };
     // 判断是否有定义
-    const item2 = CurrentNode.CheckFactorList.find(item => item.DispUnit === dispunit);
+    const item2 = CurrentNode.value.CheckFactorList.find(item => item.DispUnit === dispunit);
     if (item2) {
       item.CanEdit = item2.CanEdit;
       item.NotNullable = item2.NotNullable;

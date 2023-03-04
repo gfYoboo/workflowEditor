@@ -6,7 +6,6 @@ export default (graph, manager) => {
         cell.setData(nodeData);
       }
     } else if (cell.shape === 'duty') {
-      manager.addDutyCellId(cell.id);
       if (cell.getData().DBID === '') {
         const dutyData = manager.CreateNewDutyData();
         cell.setData(dutyData);

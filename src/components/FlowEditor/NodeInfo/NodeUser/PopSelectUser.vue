@@ -1,31 +1,32 @@
 <template>
   <!--    选择用户-->
-  <el-dialog v-model="UserListDialogVisible" title="选择用户" :close-on-click-modal="false" :close-on-press-escape="false"
-    class="UserListDialog" destroy-on-close width="610px" @opened="loadUserList" @closed="handleCloseUserListDialog">
-    <el-alert v-if="currentSelectedUser && currentSelectedUser.UserCode" v-model="currentSelectedUser"
+  <el-dialog v-model="data.UserListDialogVisible" title="选择用户" :close-on-click-modal="false"
+    :close-on-press-escape="false" class="UserListDialog" destroy-on-close width="610px" @opened="loadUserList"
+    @closed="handleCloseUserListDialog">
+    <el-alert v-if="data.currentSelectedUser && data.currentSelectedUser.UserCode" v-model="data.currentSelectedUser"
       style="margin: 10px 0" :closable="false" type="info">
       <template #title>
         <span>
-          当前选择：{{ currentSelectedUser.UserName }}({{
-            currentSelectedUser.OrgName
-          }},{{ currentSelectedUser.UserCode }})
+          当前选择：{{ data.currentSelectedUser.UserName }}({{
+            data.currentSelectedUser.OrgName
+          }},{{ data.currentSelectedUser.UserCode }})
         </span>
       </template>
     </el-alert>
     <el-alert v-else type="info" title="当前没有选择任何人" :closable="false" style="margin: 10px 0" />
-    <el-input v-model="UserListSearchKey" placeholder="输入“用户编码、用户名称”关键字搜索" clearable @input="SearchChange" />
-    <el-table highlight-current-row height="355" :data="UserTableData" @current-change="handleUserListCurrentChange">
+    <el-input v-model="data.UserListSearchKey" placeholder="输入“用户编码、用户名称”关键字搜索" clearable @input="SearchChange" />
+    <el-table highlight-current-row height="355" :data="data.UserTableData" @current-change="handleUserListCurrentChange">
       <el-table-column property="UserCode" label="用户编号" fixed />
       <el-table-column property="UserName" label="用户名称" />
       <el-table-column property="Company" label="单位名称" />
       <el-table-column property="OrgName" label="科室名称" />
     </el-table>
-    <el-pagination v-model:current-page="currentPage" :total="total" :page-size="20" background layout="prev, pager, next"
-      @current-change="currentChange" />
+    <el-pagination v-model:current-page="data.currentPage" :total="data.total" :page-size="20" background
+      layout="prev, pager, next" @current-change="currentChange" />
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="UserListDialogVisible = false">取 消</el-button>
-        <el-button type="primary" :disabled="!currentSelectedUser || !currentSelectedUser.UserCode"
+        <el-button @click="data.UserListDialogVisible = false">取 消</el-button>
+        <el-button type="primary" :disabled="!data.currentSelectedUser || !data.currentSelectedUser.UserCode"
           @click="handleChangeUser">确 定</el-button>
       </span>
     </template>

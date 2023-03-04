@@ -55,7 +55,7 @@ async function initCheckWindowFactor(reset) {
       EditAble: 'N',
       MustHaveData: 'N',
     };
-    if (CurrentNode.NodeType === 'Start') {
+    if (CurrentNode.value.NodeType === 'Start') {
       item.AddAble = 'Y';
       item.DeleteAble = 'Y';
       item.EditAble = 'Y';
@@ -63,7 +63,7 @@ async function initCheckWindowFactor(reset) {
 
     if (!reset) {
       // 判断是否有定义
-      const item2 = CurrentNode.CheckWindowFactorList.find(item => item.WindowName === windowName);
+      const item2 = CurrentNode.value.CheckWindowFactorList.find(item => item.WindowName === windowName);
       if (item2) {
         item.AddAble = item2.AddAble;
         item.EditAble = item2.EditAble;

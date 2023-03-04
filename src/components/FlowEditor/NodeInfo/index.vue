@@ -2,17 +2,17 @@
   <el-dialog v-model="showDlg" width="800px" title="节点属性" :close-on-click-modal="false" destroy-on-close @open="openDlg">
     <el-tabs type="border-card">
       <el-tab-pane label="基本设置">
-        <nodeInfoBasicStart v-if="CurrentNode.NodeType === 'Start'" />
-        <nodeInfoBasicEnd v-else-if="CurrentNode.NodeType === 'End'" />
+        <nodeInfoBasicStart v-if="data.CurrentNode.NodeType === 'Start'" />
+        <nodeInfoBasicEnd v-else-if="data.CurrentNode.NodeType === 'End'" />
         <nodeInfoBasic v-else />
       </el-tab-pane>
-      <el-tab-pane v-if="CurrentNode.NodeType === 'Normal'" label="审批用户">
+      <el-tab-pane v-if="data.CurrentNode.NodeType === 'Normal'" label="审批用户">
         <nodeUser />
       </el-tab-pane>
-      <el-tab-pane v-if="CurrentNode.NodeType !== 'End'" label="审批要素">
+      <el-tab-pane v-if="data.CurrentNode.NodeType !== 'End'" label="审批要素">
         <nodeCheckFactor ref="CheckFactor" />
       </el-tab-pane>
-      <el-tab-pane v-if="CurrentNode.NodeType !== 'End'" label="审批操作权限">
+      <el-tab-pane v-if="data.CurrentNode.NodeType !== 'End'" label="审批操作权限">
         <nodeCheckWindow ref="CheckWindow" />
       </el-tab-pane>
       <el-tab-pane label="扩展功能">
@@ -103,7 +103,8 @@ const showDlg = computed({
 
 function openDlg() {
   const cell = manager.CurrentCell;
-  data.CurrentNode = JSON.parse(JSON.stringify(cell.getData()));
+  Object.assign(data.CurrentNode, cell.getData());
+  // data.CurrentNode = JSON.parse(JSON.stringify());
 }
 function handleConfirm() {
   // 重新组织审批要素 默认值的不需要保存到数据库
