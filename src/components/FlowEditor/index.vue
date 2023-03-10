@@ -26,18 +26,23 @@
       </div>
     </div>
     <div class="qyui-cell col">
+
       <div class="qyui-cell" style="width: 120px">
         <div id="stencilContainer" style="position: relative; height: 100%; width: 100%"></div>
       </div>
+
       <div class="qyui-cell row" style="background: #88acda;padding: 20px 0;align-items: center;overflow: auto;">
         <div style="background: #ffffff; padding: 20px; border: 1px solid #888888">
           <div id="container"></div>
         </div>
       </div>
+
       <div class="qyui-cell" style="width: 300px">
         <QuickShowInfo></QuickShowInfo>
       </div>
+
     </div>
+
     <WorkFlowInfo v-model="ShowWorkFlowDlg" />
     <NoteSelectList v-model="ShowWorkFlowNoteDlg" />
     <DutyDesInfo />
@@ -74,7 +79,7 @@ import WorkflowManager from './common/WorkflowManager.js';
 import QuickShowInfo from './QuickShowInfo.vue';
 
 import createGraph from './config/graph.js';
-
+import { getPointByPort } from './util/index.js';
 const graph = ref(null);
 
 const manager = reactive(new WorkflowManager());
@@ -143,26 +148,6 @@ async function init() {
   loading.value = false;
 };
 
-function getPointByPort(port) {
-  // 记录连接点和方向。现在只用了4个方向的中心点位置  所以都是0.5
-  // 比如 0,0.5：代表左边中心桩点
-  // 比如 1,0.5：代表底边中心桩点
-  // 比如 2,0.5：代表右边中心桩点
-  // 比如 3,0.5：代表顶边中心桩点
-  // 例如0,0.5;3,0.5;0,0 代表起始点左侧，终点的顶部，0，0代表无路径点 前代表x轴值 后代表Y轴值
-  // 如果有转折点，也就是路径点 vertices 0,0.5;3,0.5;100,100;200,200代表中间经过x:100,y:100,x:200,y:200这2个点
-  switch (port) {
-    case 'port_left':
-      return '0,0.5';
-    case 'port_bottom':
-      return '1,0.5';
-    case 'port_right':
-      return '2,0.5';
-    case 'port_top':
-      return '3,0.5';
-  }
-}
-
 async function handleSave() {
   // 保存流程
   loading.value = true;
@@ -227,16 +212,8 @@ async function handleSave() {
     }
   });
   manager.WorkFlowNoteList = WorkFlowNoteList;
-  // 验证流程是否存在循环节点等
-  const flag = await manager.validate.Validate(WorkFlowNodeList, WorkFlowConditionList);
-  if (flag) {
-    // 保存流程 请求后端
-    manager.SaveWorkFlow();
-    loading.value = false;
-  } else {
-    manager.states.ShowValidateDlg = true;
-    loading.value = false;
-  }
+  // 保存流程 请求后端
+  manager.SaveWorkFlow(WorkFlowNodeList, WorkFlowConditionList);
 }
 const ShowWorkFlowDlg = ref(false);
 function handleWorkFlow() {
