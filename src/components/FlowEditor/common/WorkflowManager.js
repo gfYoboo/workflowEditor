@@ -28,7 +28,7 @@ export default class WorkflowManager {
 
     this.states = {
       CurrentNextId: -10000,
-
+      ShowNoteSelectListDlg: false,
       ShowDesDlg: false,
       ShowValidateDlg: false,
       ShowNodeUserDesDlg: false,
@@ -96,7 +96,6 @@ export default class WorkflowManager {
       WorkFlowInfo: {
         DBID: '',
         IsActive: 'Y',
-        IsStandard: 'Y',
         IsSubWorkFlow: 'N',
       },
       WorkFlowNoteList: [],
@@ -228,10 +227,6 @@ export default class WorkflowManager {
     }
   }
 
-  SetWorkFlowNote(data) {
-    this.NodeList = data;
-  }
-
   // 验证流程图相关
   Validate(WorkFlowNodeList, WorkFlowConditionList) {
     this.ErrorCollection = [];
@@ -248,84 +243,82 @@ export default class WorkflowManager {
     }
 
     WorkFlowNodeList.forEach(node => {
-      if (this.WorkFlowInfo.IsStandard === 'Y') {
-        // 开始节点 1-只能有出边(至少有一个出边，并且出边的条件有且只能有一个为空)；2-窗口名称不能为空，并且必须存在；
-        if (node.NodeType === 'Start') {
-          // 只能有出边(至少有一个出边，并且出边的条件有且只能有一个为空)
-          let startNodeConOutCount = 0;// 记录开始节点的出边个数
-          let startNodeConNullPIMOutCount = 0;// 记录开始节点的出边条件为空的个数
-          WorkFlowConditionList.forEach(con => {
-            if (con.NodeTo_XID === node.DBID) {
-              this.ErrorCollection.push('流程的开始节点"' + node.NodeName + '"不能有入边' + con.ConditionName);
-            }
-            if (con.NodeFrom_XID === node.DBID) {
-              startNodeConOutCount++;
-              if (!con.ConditionPIM) {
-                startNodeConNullPIMOutCount++;
-              }
-            }
-          });
-
-          if (startNodeConOutCount < 1) {
-            this.ErrorCollection.push('流程的开始节点"' + node.NodeName + '"至少应该有一条出边');
-          } else if (startNodeConNullPIMOutCount !== 1) { // 在开始节点具有出边的前提下验证出边条件
-            this.ErrorCollection.push('流程的开始节点"' + node.NodeName + '"有且只能有一条出边条件表达式为空');
+      // 开始节点 1-只能有出边(至少有一个出边，并且出边的条件有且只能有一个为空)；2-窗口名称不能为空，并且必须存在；
+      if (node.NodeType === 'Start') {
+        // 只能有出边(至少有一个出边，并且出边的条件有且只能有一个为空)
+        let startNodeConOutCount = 0;// 记录开始节点的出边个数
+        let startNodeConNullPIMOutCount = 0;// 记录开始节点的出边条件为空的个数
+        WorkFlowConditionList.forEach(con => {
+          if (con.NodeTo_XID === node.DBID) {
+            this.ErrorCollection.push('流程的开始节点"' + node.NodeName + '"不能有入边' + con.ConditionName);
           }
+          if (con.NodeFrom_XID === node.DBID) {
+            startNodeConOutCount++;
+            if (!con.ConditionPIM) {
+              startNodeConNullPIMOutCount++;
+            }
+          }
+        });
+
+        if (startNodeConOutCount < 1) {
+          this.ErrorCollection.push('流程的开始节点"' + node.NodeName + '"至少应该有一条出边');
+        } else if (startNodeConNullPIMOutCount !== 1) { // 在开始节点具有出边的前提下验证出边条件
+          this.ErrorCollection.push('流程的开始节点"' + node.NodeName + '"有且只能有一条出边条件表达式为空');
+        }
+      }
+
+      // 结束节点 1-只能有入边(至少有一个入边)。-------[***结束节点可以同时有多条条件为空的入边***]
+      if (node.NodeType === 'End') { // 结束节点
+        let endNodeConInCount = 0;// 记录结束节点的入边个数
+        WorkFlowConditionList.forEach(con => {
+          if (con.NodeFrom_XID === node.DBID) {
+            this.ErrorCollection.push('流程的结束节点"' + node.NodeName + '"不能有出边' + con.ConditionName);
+          }
+
+          if (con.NodeTo_XID === node.DBID) {
+            endNodeConInCount++;
+          }
+        });
+
+        if (endNodeConInCount < 1) {
+          this.ErrorCollection.push('流程的结束节点"' + node.NodeName + '"至少应该有一条入边');
+        }
+      }
+
+      // 中间结点
+      if (node.NodeType === 'Normal') {
+        // 处理名称不能为空 add by lyh 20080719
+        if (!node.NodeName) {
+          this.ErrorCollection.push('流程的节点"' + node.NodeName + '"的“节点名称”属性不能为空');
+        }
+        if (!node.ProcessName) {
+          this.ErrorCollection.push('流程的节点"' + node.ProcessName + '"的“按钮名称”属性不能为空');
         }
 
-        // 结束节点 1-只能有入边(至少有一个入边)。-------[***结束节点可以同时有多条条件为空的入边***]
-        if (node.NodeType === 'End') { // 结束节点
-          let endNodeConInCount = 0;// 记录结束节点的入边个数
-          WorkFlowConditionList.forEach(con => {
-            if (con.NodeFrom_XID === node.DBID) {
-              this.ErrorCollection.push('流程的结束节点"' + node.NodeName + '"不能有出边' + con.ConditionName);
+        // 必须既有出边也有入边,并且出边的条件有且只能有一个为空
+        let conInCount = 0;// 记录中间节点的入边个数
+        let conOutCount = 0;// 记录中间节点的出边个数
+        let conOutNullPIMCount = 0;// 记录中间节点的出边PIM表达式为空的个数（空值或空字符串都可以）
+        WorkFlowConditionList.forEach(con => {
+          if (con.NodeFrom_XID === node.DBID) { // 出边
+            conOutCount++;
+            if (!con.ConditionPIM) {
+              conOutNullPIMCount++;
             }
-
-            if (con.NodeTo_XID === node.DBID) {
-              endNodeConInCount++;
-            }
-          });
-
-          if (endNodeConInCount < 1) {
-            this.ErrorCollection.push('流程的结束节点"' + node.NodeName + '"至少应该有一条入边');
           }
+
+          if (con.NodeTo_XID === node.DBID) { // 入边
+            conInCount++;
+          }
+        });
+
+        if (conInCount < 1) {
+          this.ErrorCollection.push('流程的节点"' + node.NodeName + '"至少应该有一条入边');
         }
-
-        // 中间结点
-        if (node.NodeType === 'Normal') {
-          // 处理名称不能为空 add by lyh 20080719
-          if (!node.NodeName) {
-            this.ErrorCollection.push('流程的节点"' + node.NodeName + '"的“节点名称”属性不能为空');
-          }
-          if (!node.ProcessName) {
-            this.ErrorCollection.push('流程的节点"' + node.ProcessName + '"的“按钮名称”属性不能为空');
-          }
-
-          // 必须既有出边也有入边,并且出边的条件有且只能有一个为空
-          let conInCount = 0;// 记录中间节点的入边个数
-          let conOutCount = 0;// 记录中间节点的出边个数
-          let conOutNullPIMCount = 0;// 记录中间节点的出边PIM表达式为空的个数（空值或空字符串都可以）
-          WorkFlowConditionList.forEach(con => {
-            if (con.NodeFrom_XID === node.DBID) { // 出边
-              conOutCount++;
-              if (!con.ConditionPIM) {
-                conOutNullPIMCount++;
-              }
-            }
-
-            if (con.NodeTo_XID === node.DBID) { // 入边
-              conInCount++;
-            }
-          });
-
-          if (conInCount < 1) {
-            this.ErrorCollection.push('流程的节点"' + node.NodeName + '"至少应该有一条入边');
-          }
-          if (conOutCount < 1) {
-            this.ErrorCollection.push('流程的节点"' + node.NodeName + '"至少应该有一条出边');
-          } else if (conOutNullPIMCount !== 1) {
-            this.ErrorCollection.push('流程的节点"' + node.NodeName + '"有且只能有一条出边条件表达式为空');
-          }
+        if (conOutCount < 1) {
+          this.ErrorCollection.push('流程的节点"' + node.NodeName + '"至少应该有一条出边');
+        } else if (conOutNullPIMCount !== 1) {
+          this.ErrorCollection.push('流程的节点"' + node.NodeName + '"有且只能有一条出边条件表达式为空');
         }
       }
 
@@ -389,12 +382,11 @@ export default class WorkflowManager {
       }
     });
 
-    if (this.WorkFlowInfo.IsStandard === 'Y') {
-      // 验证流程图--任意2节点之间不能存在多余1条(直接)连接线 added by lyh 20090424
-      this.WfNodeConNodeIsLegal();
-      // 整个审批流程所有的节点不能构成环
-      this.ExistloopOfWorkFlow();
-    }
+    // 验证流程图--任意2节点之间不能存在多余1条(直接)连接线 added by lyh 20090424
+    this.WfNodeConNodeIsLegal();
+    // 整个审批流程所有的节点不能构成环
+    this.ExistloopOfWorkFlow();
+
     if (this.ErrorCollection.length === 0 && this.WarningCollection.length === 0) {
       return true;
     } else {

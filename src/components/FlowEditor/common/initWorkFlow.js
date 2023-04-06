@@ -1,6 +1,6 @@
 export default (graph, manager) => {
   // var data = {
-  //     "WorkFlowInfo": { "DBID": "100000113", "Code": "100000000109", "Name": "接待申请", "Organization_xID": "100000000", "Organization": "山东中医药大学附属医院", "DocTypeName": "接待申请", "IsSubWorkFlow": "N", "IsStandard": "Y", "IsActive": "Y" },
+  //     "WorkFlowInfo": { "DBID": "100000113", "Code": "100000000109", "Name": "接待申请", "Organization_xID": "100000000", "Organization": "山东中医药大学附属医院", "DocTypeName": "接待申请", "IsSubWorkFlow": "N",   "IsActive": "Y" },
   //     "WorkFlowNoteList": [
   //         { "NoteName": "", "NoteName_Xid": "0", "DispX": "20", "DispY": "158", "Des": "" },
   //         { "NoteName": "业务部门", "NoteName_Xid": "100000000", "DispX": "20", "DispY": "217", "Des": "" },

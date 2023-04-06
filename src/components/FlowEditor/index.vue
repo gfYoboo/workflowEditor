@@ -4,27 +4,11 @@
       <div style="padding: 10px 20px">
         <el-button type="primary" @click="handleSave">保存</el-button>
         <el-button type="success" @click="handleWorkFlow">流程属性</el-button>
-        <el-button type="success" @click="handleWorkFlowNote">职能部门维护</el-button>
         <el-button type="success" @click="handleUndo">撤销</el-button>
         <el-button type="success" @click="handleRedo">重做</el-button>
-        <!-- <div>
-          <span>
-            <el-icon>
-              <refresh-left />
-            </el-icon>
-          </span>
-          <span></span>
-        </div>
-        <div>
-          <span>
-            <el-icon>
-              <refresh-right />
-            </el-icon>
-          </span>
-          <span></span>
-        </div>-->
       </div>
     </div>
+
     <div class="qyui-cell col">
 
       <div class="qyui-cell" style="width: 120px">
@@ -37,20 +21,20 @@
         </div>
       </div>
 
-      <div class="qyui-cell" style="width: 300px">
+      <div class="qyui-cell" style="width: 250px">
         <QuickShowInfo></QuickShowInfo>
       </div>
 
     </div>
 
     <WorkFlowInfo v-model="ShowWorkFlowDlg" />
-    <NoteSelectList v-model="ShowWorkFlowNoteDlg" />
+    <NoteSelectList />
     <DutyDesInfo />
+
     <NodeInfo />
     <EdgeInfo />
     <EditExpression />
     <ErrorMsg />
-    <WorkFlowNote />
   </div>
 </template>
 
@@ -65,7 +49,6 @@ import DutyDesInfo from './Duty/DutyDesInfo.vue';
 import WorkFlowInfo from './WorkFlowInfo.vue';
 import NodeInfo from './NodeInfo/index.vue';
 import EdgeInfo from './EdgeInfo.vue';
-import WorkFlowNote from './WorkFlowNote.vue';
 
 import EditExpression from './EditExpression.vue';
 import ErrorMsg from './ErrorMsg.vue';
@@ -80,6 +63,7 @@ import QuickShowInfo from './QuickShowInfo.vue';
 
 import createGraph from './config/graph.js';
 import { getPointByPort } from './util/index.js';
+import { get } from 'lodash';
 const graph = ref(null);
 
 const manager = reactive(new WorkflowManager());
@@ -220,11 +204,7 @@ function handleWorkFlow() {
   // 显示流程属性维护窗口
   ShowWorkFlowDlg.value = true;
 }
-const ShowWorkFlowNoteDlg = ref(false);
-function handleWorkFlowNote() {
-  // 显示职能带维护
-  ShowWorkFlowNoteDlg.value = true;
-}
+
 function handleUndo() {
   // 撤销
   graph.value.undo();

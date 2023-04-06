@@ -28,7 +28,7 @@ const showDlg = computed({
 });
 
 function openDlg() {
-  const cells = graph.getSelectedCells();
+  const cells = graph.value.getSelectedCells();
   if (cells.length) {
     const cell = cells[0];
     if (cell.shape === 'dutydes') {

@@ -40,17 +40,3 @@ export function SaveWorkFlow(data) {
       data,
     });
 }
-export function SaveWorkFlowNote(data) {
-  return request(
-    {
-      url: '/api/workflow/SaveWorkFlowNote',
-      data,
-    });
-}
-export function RemoveWorkFlowNote(data) {
-  return request(
-    {
-      url: '/api/workflow/RemoveWorkFlowNote',
-      data,
-    });
-}

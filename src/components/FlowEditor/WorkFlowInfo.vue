@@ -21,9 +21,7 @@
       <el-form-item label="是否启用">
         <el-switch v-model="flow.IsActive" active-value="Y" inactive-value="N" />
       </el-form-item>
-      <el-form-item label="是否标准流程">
-        <el-switch v-model="flow.IsStandard" active-value="Y" inactive-value="N" />
-      </el-form-item>
+
       <el-form-item label="是否子流程">
         <el-switch v-model="flow.IsSubWorkFlow" active-value="Y" inactive-value="N" />
       </el-form-item>
@@ -38,13 +36,13 @@
 <script setup>
 
 const manager = inject('manager');
+const emits = defineEmits(['update:modelValue']);
 
 const flow = reactive({
   Code: '',
   Name: '',
   DocTypeName: '',
   IsActive: 'Y',
-  IsStandard: 'Y',
   IsSubWorkFlow: 'N',
   Organization_xID: '',
 });
@@ -54,10 +52,11 @@ function openDlg() {
 }
 function handleConfirm() {
   manager.UpdateWorkFlowInfo(flow);
+  emits('update:modelValue', false);
 }
 function handleCancel() {
+  emits('update:modelValue', false);
 }
-function handleEdit() { }
 
 </script>
 

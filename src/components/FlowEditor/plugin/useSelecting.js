@@ -16,7 +16,7 @@ export default (graph) => {
       // 是否显示边的选择框 false
       showEdgeSelectionBox: false,
       // 节点过滤器 可被选中 与上个版本不一样
-      filter: ['start', 'end', 'normal', 'edge'],
+      filter: ['start', 'end', 'normal', 'edge', 'dutyorg', 'dutydes'],
     }),
   );
 };

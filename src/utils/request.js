@@ -30,7 +30,6 @@ service.interceptors.request.use(
 // response 拦截器
 service.interceptors.response.use(
   response => {
-    console.log(response);
     const res = response.data;
     if (res.Code && res.Code === 'T') {
       clearSession();

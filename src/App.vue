@@ -18,6 +18,7 @@ body {
   margin: 0;
   overflow: hidden;
 }
+
 #app {
   height: 100%;
   width: 100%;

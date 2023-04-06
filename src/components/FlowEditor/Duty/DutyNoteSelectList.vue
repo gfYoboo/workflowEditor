@@ -1,5 +1,5 @@
 <template>
-  <el-dialog width="300px" title="选择部门" :close-on-click-modal="false" @open="openDlg">
+  <el-dialog v-model="showDlg" width="300px" title="选择部门" :close-on-click-modal="false" @open="openDlg">
     <div style="height:400px">
       <div class="qyui-cell row qyui-container">
         <div class="qyui-cell row">
@@ -61,7 +61,7 @@ function openDlg() {
   data.currentItem = {};
 }
 function selected(item) {
-  const cells = graph.getSelectedCells();
+  const cells = graph.value.getSelectedCells();
   if (cells.length) {
     const cell = cells[0];
     if (cell.shape === 'dutyorg') {
@@ -73,12 +73,6 @@ function selected(item) {
         NoteName: item?.NoteName || '',
         NoteName_Xid: item?.ID || '',
       });
-
-      // manager.UpdateDuty({
-      //   DBID: pcell.getData().DBID,
-      //   NoteName: item?.NoteName || '',
-      //   NoteName_xID: item?.ID || '',
-      // });
     }
   }
 }

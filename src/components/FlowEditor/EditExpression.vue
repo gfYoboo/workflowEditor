@@ -52,20 +52,7 @@
           </el-table>
         </div>
       </div>
-      <!-- <div class="qyui-cell bdt"
-           style="height: 40px;">
-        <div class="qyui-cell row"
-             style="align-items: flex-end;">
-          <div>
-            <el-button type="warning"
-                       @click="handleValidateExpression">验 证</el-button>
-            <el-button type="primary"
-                       @click="handleConfirm">确 定</el-button>
-            <el-button @click="handleCancel">取 消</el-button>
-          </div>
 
-        </div>
-      </div>-->
     </div>
     <template #footer>
       <span class="dialog-footer">
